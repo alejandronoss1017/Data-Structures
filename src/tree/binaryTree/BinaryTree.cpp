@@ -1,4 +1,4 @@
-#include "BinaryTree.hpp"
+#include "../../../include/tree/binaryTree/BinaryTree.hpp"
 
 /**
  * @brief Construct a new Binary Tree object with

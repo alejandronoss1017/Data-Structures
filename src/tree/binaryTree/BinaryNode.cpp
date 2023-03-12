@@ -1,4 +1,4 @@
-#include "BinaryNode.hpp"
+#include "../../../include/tree/binaryTree/BinaryNode.hpp"
 
 /**
  * @brief Construct a new Binary Node.
