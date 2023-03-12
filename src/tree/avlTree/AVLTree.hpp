@@ -1,0 +1,10 @@
+#if !defined(DATA_STRUCTURES_AVL_TREE_HPP)
+#define DATA_STRUCTURES_AVL_TREE_HPP
+
+
+class AVLTree {
+
+};
+
+
+#endif //DATA_STRUCTURES_AVL_TREE_HPP

@@ -1,0 +1,19 @@
+#Output files
+*.aout
+*.o
+*.exe
+build/*
+
+#Cmake
+cmake-build-debug/*
+
+# IDEs directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
