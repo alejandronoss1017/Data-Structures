@@ -1,1 +1,1 @@
-add_executable(binaryTreeInsert test.cpp)
+add_executable(quadTreeInsert test.cpp)

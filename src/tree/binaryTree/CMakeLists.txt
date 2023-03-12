@@ -1,1 +1,2 @@
-add_library(graph AVLTree.hpp)
+add_library(BinaryTree BinaryTree.cpp)
+add_library(BinaryNode BinaryNode.cpp)

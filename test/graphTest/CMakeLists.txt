@@ -1,2 +1,1 @@
-add_subdirectory(graphTest)
-add_subdirectory(treeTest)
+add_executable(graphTest test.cpp)

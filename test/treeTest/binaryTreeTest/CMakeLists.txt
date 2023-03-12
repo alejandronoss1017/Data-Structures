@@ -1,1 +1,1 @@
-add_executable(avlTreeInsert test.cpp)
+add_executable(binaryTreeInsert test.cpp)
