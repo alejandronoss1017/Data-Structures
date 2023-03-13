@@ -50,6 +50,6 @@ public:
   void setRightChild(BinaryNode<T> *node);
 };
 
-// #include "src/tree/binaryTree/BinaryNode.cpp"
+ #include "../../../src/tree/binaryTree/BinaryNode.cpp"
 
 #endif // DATA_STRUCTURES_BINARY_NODE_HPP
