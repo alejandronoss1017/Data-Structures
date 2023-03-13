@@ -1,8 +1,0 @@
-//
-// Created by canc on 3/12/23.
-//
-
-#ifndef DATA_STRUCTURES_AVLNODE_H
-#define DATA_STRUCTURES_AVLNODE_H
-
-#endif //DATA_STRUCTURES_AVLNODE_H
