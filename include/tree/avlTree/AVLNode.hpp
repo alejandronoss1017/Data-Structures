@@ -1,7 +1,5 @@
-#if !defined(DATA_STRUCTURES_AVL_NODE_H)
-#define DATA_STRUCTURES_AVL_NODE_H
-
-#include "../binaryTree/BinaryNode.hpp"
+#if !defined(DATA_STRUCTURES_AVL_NODE_HPP)
+#define DATA_STRUCTURES_AVL_NODE_HPP
 
 template <typename T>
 class AVLNode
@@ -35,4 +33,4 @@ public:
 };
 
 #include "../../../src/tree/avlTree/AVLNode.cpp"
-#endif // DATA_STRUCTURES_AVL_NODE_H
+#endif // DATA_STRUCTURES_AVL_NODE_HPP
