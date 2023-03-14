@@ -1,3 +1,0 @@
-add_subdirectory(avlTreeTest)
-add_subdirectory(binaryTreeTest)
-add_subdirectory(quadTreeTest)
