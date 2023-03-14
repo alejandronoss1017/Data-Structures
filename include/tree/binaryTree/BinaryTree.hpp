@@ -90,6 +90,7 @@ public:
     friend ostream &operator<<(ostream &os, const BinaryTree<U> &tree);
 };
 
+// This must removed when compiling in CMake
 #include "../../../src/tree/binaryTree/BinaryTree.cpp"
 
 #endif // DATA_STRUCTURES_BINARY_TREE_HPP

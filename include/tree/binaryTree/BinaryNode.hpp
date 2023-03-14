@@ -50,6 +50,7 @@ public:
   void setRightChild(BinaryNode<T> *node);
 };
 
+// This must removed when compiling in CMake
  #include "../../../src/tree/binaryTree/BinaryNode.cpp"
 
 #endif // DATA_STRUCTURES_BINARY_NODE_HPP
