@@ -9,22 +9,23 @@ AVLTree<T>::AVLTree()
 template <typename T>
 AVLTree<T>::AVLTree(const T &data)
 {
-    root = new AVLNode(data);
+    //Fix constructor
+    root = new AVLNode<T>(data);
 }
 
 template <typename T>
 AVLTree<T>::~AVLTree() = default;
 
+//Removed inline keyword and set highs 
 template <typename T>
-inline bool AVLTree<T>::insertNode(const T &data, AVLNode<T> *node)
+bool AVLTree<T>::insertNode(const T &data, AVLNode<T> *node)
 {
+    // root->setHeight(heightHelper(root));
     if (data < node->getData())
     {
         if (node->getLeftChild() == nullptr)
         {
             node->setLeftChild(new AVLNode<T>(data));
-            /*  Once the child is inserted update the high of the node  */
-            node->setHeight(heightHelper(node));
             return true;
         }
         else
@@ -37,8 +38,6 @@ inline bool AVLTree<T>::insertNode(const T &data, AVLNode<T> *node)
         if (node->getRightChild() == nullptr)
         {
             node->setRightChild(new AVLNode<T>(data));
-            /*  Once the child is inserted update the high of the node  */
-            node->setHeight(heightHelper(node));
             return true;
         }
         else
@@ -65,6 +64,11 @@ int AVLTree<T>::heightHelper(AVLNode<T> *node) const
     int rightHeight = heightHelper(node->getRightChild());
 
     return 1 + max(leftHeight, rightHeight);
+}
+
+template <typename T>
+int AVLTree<T>::rebalance(AVLNode<T> *node) const
+{
 }
 
 template <typename T>
@@ -132,7 +136,6 @@ void AVLTree<T>::traverseInOrderHelper(AVLNode<T> *node, ostream &os) const
 template <typename T>
 bool AVLTree<T>::insert(const T &data)
 {
-    // TODO: Revisar rotaciones
     if (root == nullptr)
     {
         root = new AVLNode<T>(data);
@@ -142,6 +145,7 @@ bool AVLTree<T>::insert(const T &data)
     {
         if (insertNode(data, root))
         {
+            root->setHeight(heightHelper(root));
             int balance = heightHelper(root->getLeftChild()) - heightHelper(root->getRightChild());
 
             if (balance == 2)
