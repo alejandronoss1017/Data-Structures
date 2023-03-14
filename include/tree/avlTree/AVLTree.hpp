@@ -4,6 +4,8 @@
 #include <ostream>
 #include "AVLNode.hpp"
 
+using namespace std;
+
 template <typename T>
 class AVLTree
 {
@@ -14,6 +16,8 @@ private:
     bool insertNode(const T &data, AVLNode<T> *node);
 
     int heightHelper(AVLNode<T> *node) const;
+
+    int rebalance(AVLNode<T> *node) const;
 
     AVLNode<T> *rightRotation(AVLNode<T> *node);
 
@@ -62,6 +66,7 @@ public:
     friend ostream &operator<<(ostream &os, const AVLTree<U> &tree);
 };
 
+// This must removed when compiling in CMake
 #include "../../../src/tree/avlTree/AVLTree.cpp"
 
 #endif // DATA_STRUCTURES_AVL_TREE_HPP
