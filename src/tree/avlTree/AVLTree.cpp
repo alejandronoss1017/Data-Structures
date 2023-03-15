@@ -9,23 +9,24 @@ AVLTree<T>::AVLTree()
 template <typename T>
 AVLTree<T>::AVLTree(const T &data)
 {
-    //Fix constructor
+    // Fix constructor
     root = new AVLNode<T>(data);
 }
 
 template <typename T>
 AVLTree<T>::~AVLTree() = default;
 
-//Removed inline keyword and set highs 
+// Removed inline keyword and set highs
 template <typename T>
 bool AVLTree<T>::insertNode(const T &data, AVLNode<T> *node)
 {
-    // root->setHeight(heightHelper(root));
+    // Case if is less
     if (data < node->getData())
     {
         if (node->getLeftChild() == nullptr)
         {
             node->setLeftChild(new AVLNode<T>(data));
+            updateHeight(node);
             return true;
         }
         else
@@ -33,11 +34,13 @@ bool AVLTree<T>::insertNode(const T &data, AVLNode<T> *node)
             return insertNode(data, node->getLeftChild());
         }
     }
+    // Case if is greater
     else if (data > node->getData())
     {
         if (node->getRightChild() == nullptr)
         {
             node->setRightChild(new AVLNode<T>(data));
+            updateHeight(node);
             return true;
         }
         else
@@ -45,6 +48,7 @@ bool AVLTree<T>::insertNode(const T &data, AVLNode<T> *node)
             return insertNode(data, node->getRightChild());
         }
     }
+    // Case if is equal
     else
     {
         return false;
@@ -65,11 +69,20 @@ int AVLTree<T>::heightHelper(AVLNode<T> *node) const
 
     return 1 + max(leftHeight, rightHeight);
 }
-
 template <typename T>
-int AVLTree<T>::rebalance(AVLNode<T> *node) const
+void AVLTree<T>::updateHeight(AVLNode<T> *node)
 {
+    if (node == nullptr)
+    {
+        return;
+    }
+    node->setHeight(heightHelper(node));
 }
+
+// template <typename T>
+// int AVLTree<T>::rebalance(AVLNode<T> *node) const
+// {
+// }
 
 template <typename T>
 AVLNode<T> *AVLTree<T>::rightRotation(AVLNode<T> *node)
@@ -141,44 +154,14 @@ bool AVLTree<T>::insert(const T &data)
         root = new AVLNode<T>(data);
         return true;
     }
-    else
+
+    if (insertNode(data, root))
     {
-        if (insertNode(data, root))
-        {
-            root->setHeight(heightHelper(root));
-            int balance = heightHelper(root->getLeftChild()) - heightHelper(root->getRightChild());
-
-            if (balance == 2)
-            {
-
-                int leftBalance = heightHelper(root->getLeftChild()->getLeftChild()) -
-                                  heightHelper(root->getLeftChild()->getRightChild());
-
-                if (leftBalance == 1 || leftBalance == 0)
-                {
-                    root = rightRotation(root);
-                }
-                else if (leftBalance == -1)
-                {
-                    leftRightRotation(root);
-                }
-            }
-            else if (balance == -2)
-            {
-                int rightBalance = heightHelper(root->getRightChild()->getLeftChild()) -
-                                   heightHelper(root->getRightChild()->getRightChild());
-                if (rightBalance == -1 || rightBalance == 0)
-                {
-                    root = leftRotation(root);
-                }
-                else if (rightBalance == 1)
-                {
-                    rightLeftRotation(root);
-                }
-            }
-            return true;
-        }
+        updateHeight(root);
+        // Do balance rotations
+        return true;
     }
+
     return false;
 }
 

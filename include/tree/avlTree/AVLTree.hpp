@@ -17,7 +17,9 @@ private:
 
     int heightHelper(AVLNode<T> *node) const;
 
-    int rebalance(AVLNode<T> *node) const;
+    void updateHeight(AVLNode<T> *node);
+
+    // int rebalance(AVLNode<T> *node) const;
 
     AVLNode<T> *rightRotation(AVLNode<T> *node);
 
