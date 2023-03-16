@@ -1,7 +1,7 @@
 #include "../../../include/tree/avlTree/AVLNode.hpp"
 
 template <typename T>
-AVLNode<T>::AVLNode(const T &data) : BinaryNode<T>(data)
+AVLNode<T>::AVLNode(const T &data)
 {
     this->data = data;
     this->height = 1;
