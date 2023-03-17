@@ -30,6 +30,9 @@ T AVLNode<T>::getData() const
 }
 
 template <typename T>
+AVLNode<T>::~AVLNode() = default;
+
+template <typename T>
 int AVLNode<T>::getHeight() const
 {
     return height;

@@ -18,6 +18,8 @@ public:
     /*  Getters and Setters  */
     T getData() const;
 
+    virtual ~AVLNode();
+
     int getHeight() const;
 
     void setHeight(int height);
