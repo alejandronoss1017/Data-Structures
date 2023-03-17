@@ -290,6 +290,29 @@ void AVLTree<T>::traverseInOrderHelper(AVLNode<T> *node, ostream &os) const
     os << node->getData() << " ";
     traverseInOrderHelper(node->getRightChild(), os);
 }
+template <typename T>
+void AVLTree<T>::traversePreOrderHelper(AVLNode<T> *node) const
+{
+    if (node == nullptr)
+    {
+        return;
+    }
+    cout << node->getData() << " ";
+    traversePreOrderHelper(node->getLeftChild());
+    traversePreOrderHelper(node->getRightChild());
+}
+
+template <typename T>
+void AVLTree<T>::traversePostOrderHelper(AVLNode<T> *node) const
+{
+    if (node == nullptr)
+    {
+        return;
+    }
+    traversePreOrderHelper(node->getLeftChild());
+    traversePreOrderHelper(node->getRightChild());
+    cout << node->getData() << " ";
+}
 
 // Si la diferencia de altura difiere es igual 2 o -2 tenemos que rotar
 
@@ -350,6 +373,40 @@ bool AVLTree<T>::operator==(const AVLTree<T> &otherTree) const
 }
 
 template <typename T>
+bool AVLTree<T>::operator!=(const AVLTree<T> &otherTree) const
+{
+    /**
+     * Use the == overload to compare if the trees are different, it
+     * will return true, if are equals return false.
+     */
+    return !(*this == otherTree);
+}
+
+template <typename T>
+bool AVLTree<T>::operator<(const AVLTree &otherTree) const
+{
+    return root->getHeight() < otherTree.root->getHeight();
+}
+
+template <typename T>
+bool AVLTree<T>::operator>(const AVLTree &otherTree) const
+{
+    return root->getHeight() > otherTree.root->getHeight();
+}
+
+template <typename T>
+bool AVLTree<T>::operator<=(const AVLTree &otherTree) const
+{
+    return !(root->getHeight() < otherTree.root->getHeight());
+}
+
+template <typename T>
+bool AVLTree<T>::operator>=(const AVLTree &otherTree) const
+{
+    return !(root->getHeight() > otherTree.root->getHeight());
+}
+
+template <typename T>
 bool AVLTree<T>::remove(const T &data)
 {
     int prevHeight = root->getHeight();
@@ -375,10 +432,23 @@ bool AVLTree<T>::find(const T &data) const
     return false;
 }
 template <typename T>
+void AVLTree<T>::traversePreOrder()
+{
+    traversePreOrderHelper(root);
+}
+
+template <typename T>
+void AVLTree<T>::traversePostOrder()
+{
+    traversePostOrderHelper(root);
+}
+
+template <typename T>
 bool AVLTree<T>::empty() const
 {
     return emptyHelper(root);
 }
+
 template <typename T>
 T AVLTree<T>::smallest() const
 {
