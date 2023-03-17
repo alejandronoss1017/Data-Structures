@@ -8,6 +8,14 @@ AVLNode<T>::AVLNode(const T &data)
     this->leftChild = nullptr;
     this->rightChild = nullptr;
 }
+template <typename T>
+AVLNode<T>::AVLNode(const T &data, int height, AVLNode<T> *leftChild, AVLNode<T> *rightChild)
+{
+    this->data = data;
+    this->height = height;
+    this->leftChild = leftChild;
+    this->rightChild = rightChild;
+}
 
 template <typename T>
 void AVLNode<T>::setData(T data)

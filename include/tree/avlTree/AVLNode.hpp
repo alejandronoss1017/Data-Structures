@@ -13,6 +13,7 @@ protected:
 public:
     /*  Constructors  */
     explicit AVLNode(const T &data);
+    AVLNode(const T &data, int height, AVLNode<T> *leftChild, AVLNode<T> *rightChild);
 
     /*  Getters and Setters  */
     T getData() const;
