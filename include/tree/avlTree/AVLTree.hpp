@@ -32,11 +32,15 @@ private:
 
     void clearHelper(AVLNode<T> *node);
 
+    bool equals(const AVLNode<T> *node1, const AVLNode<T> *node2) const;
+
     AVLNode<T> *balance(AVLNode<T> *node);
 
     AVLNode<T> *rotateRight(AVLNode<T> *node);
 
     AVLNode<T> *rotateLeft(AVLNode<T> *node);
+
+    AVLNode<T> *copyTree(AVLNode<T> *node) const;
 
     bool findNodeHelper(AVLNode<T> *node, const T &data) const;
 
