@@ -18,42 +18,36 @@ AVLTree<T>::~AVLTree() = default;
 
 // Removed inline keyword and set highs
 template <typename T>
-bool AVLTree<T>::insertNode(const T &data, AVLNode<T> *node)
+AVLNode<T> *AVLTree<T>::insertHelper(const T &data, AVLNode<T> *node)
 {
-    // Case if is less
+
+    // Si el nodo es nulo, creamos uno nuevo
+    if (node == nullptr)
+    {
+        return new AVLNode<T>(data);
+    }
+
+    // Insertamos en el subárbol izquierdo
     if (data < node->getData())
     {
-        if (node->getLeftChild() == nullptr)
-        {
-            node->setLeftChild(new AVLNode<T>(data));
-            updateHeight(node);
-            return true;
-        }
-        else
-        {
-            return insertNode(data, node->getLeftChild());
-        }
+        node->setLeftChild(insertHelper(data, node->getLeftChild()));
     }
-    // Case if is greater
+    // Insertamos en el subárbol derecho
     else if (data > node->getData())
     {
-        if (node->getRightChild() == nullptr)
-        {
-            node->setRightChild(new AVLNode<T>(data));
-            updateHeight(node);
-            return true;
-        }
-        else
-        {
-            return insertNode(data, node->getRightChild());
-        }
+        node->setRightChild(insertHelper(data, node->getRightChild()));
     }
-    // Case if is equal
+    // Si el elemento ya existe, no hacemos nada
     else
     {
-        return false;
+        return node;
     }
-    return false;
+
+    // Actualizamos la altura del nodo actual
+    updateHeight(node);
+
+    // Balanceamos el árbol
+    return balance(node);
 }
 
 template <typename T>
@@ -64,62 +58,111 @@ int AVLTree<T>::heightHelper(AVLNode<T> *node) const
         return 0;
     }
 
-    int leftHeight = heightHelper(node->getLeftChild());
-    int rightHeight = heightHelper(node->getRightChild());
-
-    return 1 + max(leftHeight, rightHeight);
+    return node->getHeight();
 }
+
 template <typename T>
 void AVLTree<T>::updateHeight(AVLNode<T> *node)
 {
+    int leftHeight = heightHelper(node->getLeftChild());
+    int rightHeight = heightHelper(node->getRightChild());
+    node->setHeight(max(leftHeight, rightHeight) + 1);
+}
+
+template <typename T>
+int AVLTree<T>::balanceFactor(AVLNode<T> *node) const
+{
     if (node == nullptr)
     {
-        return;
+        return 0;
     }
-    node->setHeight(heightHelper(node));
+
+    int leftHeight = heightHelper(node->getLeftChild());
+    int rightHeight = heightHelper(node->getRightChild());
+
+    return leftHeight - rightHeight;
+}
+template <typename T>
+bool AVLTree<T>::emptyHelper(AVLNode<T> *node) const
+{
+    if (node == nullptr)
+    {
+        return true;
+    }
+    return false;
 }
 
-// template <typename T>
-// int AVLTree<T>::rebalance(AVLNode<T> *node) const
-// {
-// }
+template <typename T>
+AVLNode<T> *AVLTree<T>::balance(AVLNode<T> *node)
+{
+    int bf = balanceFactor(node);
+
+    if (bf > 1)
+    {
+        if (balanceFactor(node->getLeftChild()) < 0)
+        {
+            node->setLeftChild(rotateLeft(node->getLeftChild()));
+        }
+        return rotateRight(node);
+    }
+    else if (bf < -1)
+    {
+        if (balanceFactor(node->getRightChild()) > 0)
+        {
+            node->setRightChild(rotateRight(node->getRightChild()));
+        }
+        return rotateLeft(node);
+    }
+
+    return node;
+}
 
 template <typename T>
-AVLNode<T> *AVLTree<T>::rightRotation(AVLNode<T> *node)
+AVLNode<T> *AVLTree<T>::rotateRight(AVLNode<T> *node)
 {
     AVLNode<T> *parent = node->getLeftChild();
-    node->setLeftChild(node->getRightChild());
+    node->setLeftChild(parent->getRightChild());
     parent->setRightChild(node);
 
-    node->setHeight(heightHelper(node));
-    parent->setHeight(heightHelper(parent));
+    updateHeight(node);
+    updateHeight(parent);
 
     return parent;
 }
 
 template <typename T>
-AVLNode<T> *AVLTree<T>::leftRotation(AVLNode<T> *node)
+AVLNode<T> *AVLTree<T>::rotateLeft(AVLNode<T> *node)
 {
     AVLNode<T> *parent = node->getRightChild();
-    node->setRightChild(node->getLeftChild());
+    node->setRightChild(parent->getLeftChild());
     parent->setLeftChild(node);
 
-    node->setHeight(heightHelper(node));
-    parent->setHeight(heightHelper(parent));
+    updateHeight(node);
+    updateHeight(parent);
     return parent;
 }
+template <typename T>
+bool AVLTree<T>::findNodeHelper(AVLNode<T> *node, const T &data) const
+{
 
-template <typename T>
-AVLNode<T> *AVLTree<T>::rightLeftRotation(AVLNode<T> *node)
-{
-    node->setRightChild(rightRotation(node->getRightChild()));
-    return leftRotation(node);
-}
-template <typename T>
-AVLNode<T> *AVLTree<T>::leftRightRotation(AVLNode<T> *node)
-{
-    node->setLeftChild(leftRotation(node->getLeftChild()));
-    return rightRotation(node);
+    if (node == nullptr)
+    {
+        return false;
+    }
+
+    if (node->getData() == data)
+    {
+        return true;
+    }
+    else if (data < node->getData())
+    {
+        return findNodeHelper(node->getLeftChild(), data);
+    }
+    else
+    {
+        return findNodeHelper(node->getRightChild(), data);
+    }
+    return false;
 }
 
 template <typename T>
@@ -155,26 +198,42 @@ bool AVLTree<T>::insert(const T &data)
         return true;
     }
 
-    if (insertNode(data, root))
-    {
-        updateHeight(root);
-        // Do balance rotations
-        return true;
-    }
-
-    return false;
+    int prevSize = root->getHeight();
+    root = insertHelper(data, root);
+    int newSize = root->getHeight();
+    return newSize > prevSize;
 }
 
 template <typename T>
-int AVLTree<T>::height()
+int AVLTree<T>::height() const
 {
-    return heightHelper(root);
+    if (root == nullptr)
+    {
+        return 0;
+    }
+
+    return root->getHeight();
 }
 
 template <typename T>
 bool AVLTree<T>::remove(const T &data)
 {
     return false;
+}
+template <typename T>
+bool AVLTree<T>::find(const T &data) const
+{
+    if (findNodeHelper(root, data))
+    {
+        return true;
+    }
+
+    return false;
+}
+template <typename T>
+bool AVLTree<T>::empty() const
+{
+    return emptyHelper(root);
 }
 
 template <typename U>
