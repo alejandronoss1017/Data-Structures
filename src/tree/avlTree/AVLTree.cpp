@@ -1,5 +1,4 @@
 #include "../../../include/tree/avlTree/AVLTree.hpp"
-#include "AVLTree.hpp"
 
 template <typename T>
 AVLTree<T>::AVLTree()
@@ -49,6 +48,74 @@ AVLNode<T> *AVLTree<T>::insertHelper(const T &data, AVLNode<T> *node)
 
     // Balanceamos el árbol
     return balance(node);
+}
+
+template <typename T>
+AVLNode<T> *AVLTree<T>::removeHelper(AVLNode<T> *node, const T &data)
+{
+    if (node == nullptr)
+    {
+        return nullptr;
+    }
+    else if (data < node->getData())
+    {
+        node->setLeftChild(removeHelper(node->getLeftChild(), data));
+    }
+    else if (data > node->getData())
+    {
+        node->setRightChild(removeHelper(node->getRightChild(), data));
+    }
+    else
+    {
+        AVLNode<T> *leftChild = node->getLeftChild();
+        AVLNode<T> *rightChild = node->getRightChild();
+        if (leftChild == nullptr && rightChild == nullptr)
+        {
+            delete node;
+            return nullptr;
+        }
+        else if (leftChild == nullptr)
+        {
+            delete node;
+            return rightChild;
+        }
+        else if (rightChild == nullptr)
+        {
+            delete node;
+            return leftChild;
+        }
+        else
+        {
+            AVLNode<T> *maxNode = findLargestNode(leftChild);
+            node->setData(maxNode->getData());
+            node->setRightChild(removeHelper(leftChild, maxNode->getData()));
+        }
+    }
+    return balance(node);
+}
+
+template <typename T>
+AVLNode<T> *AVLTree<T>::findSmallestNode(AVLNode<T> *node)
+{
+    /*  This could be implemented in a recursive form also, but I prefer
+    in an iterative form because where are just moving in the right child*/
+    while (node != nullptr && node->getLeftChild() != nullptr)
+    {
+        node = node->getLeftChild();
+    }
+    return node;
+}
+
+template <typename T>
+AVLNode<T> *AVLTree<T>::findLargestNode(AVLNode<T> *node)
+{
+    /*  This could be implemented in a recursive form also, but I prefer
+    in an iterative form because where are just moving in the right child*/
+    while (node != nullptr && node->getRightChild() != nullptr)
+    {
+        node = node->getRightChild();
+    }
+    return node;
 }
 
 template <typename T>
@@ -210,10 +277,10 @@ bool AVLTree<T>::insert(const T &data)
         return true;
     }
 
-    int prevSize = root->getHeight();
+    int prevHeight = root->getHeight();
     root = insertHelper(data, root);
-    int newSize = root->getHeight();
-    return newSize > prevSize;
+    int newHeight = root->getHeight();
+    return newHeight > prevHeight;
 }
 
 template <typename T>
@@ -230,7 +297,10 @@ int AVLTree<T>::height() const
 template <typename T>
 bool AVLTree<T>::remove(const T &data)
 {
-    return false;
+    int prevHeight = root->getHeight();
+    root = removeHelper(root, data);
+    int newHeight = root->getHeight();
+    return newHeight < prevHeight;
 }
 template <typename T>
 void AVLTree<T>::clear()

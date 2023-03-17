@@ -16,6 +16,12 @@ private:
     // TODO: Change order of params -> ALVNode, &data
     AVLNode<T> *insertHelper(const T &data, AVLNode<T> *node);
 
+    AVLNode<T> *removeHelper(AVLNode<T> *node, const T &data);
+
+    AVLNode<T> *findSmallestNode(AVLNode<T> *node);
+
+    AVLNode<T> *findLargestNode(AVLNode<T> *node);
+
     int heightHelper(AVLNode<T> *node) const;
 
     void updateHeight(AVLNode<T> *node);
