@@ -1,27 +1,52 @@
 #include "../../../include/tree/avlTree/AVLTree.hpp"
 
+/**
+ * @brief Construct a new AVLTree with nullptr root.
+ *
+ * @tparam T Primitive types or classes.
+ */
 template <typename T>
 AVLTree<T>::AVLTree()
 {
     root = nullptr;
 }
 
+/**
+ * @brief Construct a new AVLTree with a root value.
+ *
+ * @tparam T Primitive types or classes.
+ * @param data Value to be inserted on the AVLTree root.
+ */
 template <typename T>
 AVLTree<T>::AVLTree(const T &data)
 {
-    // Fix constructor
     root = new AVLNode<T>(data);
 }
 
+/**
+ * @brief Destroy a AVLTree.
+ *
+ * @tparam T Primitive types or classes.
+ */
 template <typename T>
 AVLTree<T>::~AVLTree()
 {
     deleteTree(root);
 }
 
-// Removed inline keyword and set highs
+/**
+ * @brief Private method to create a new AVLNode and
+ * insert it into the right position. Once the AVLNode is
+ * inserted the AVLTree will update all nodes heights and
+ * do balance.
+ *
+ * @tparam T Primitive types or classes.
+ * @param node Root of the AVLTree to be inserted the new AVLNode.
+ * @param data Value to be inserted inside the new AVLNode.
+ * @return AVLNode<T>*
+ */
 template <typename T>
-AVLNode<T> *AVLTree<T>::insertHelper(const T &data, AVLNode<T> *node)
+AVLNode<T> *AVLTree<T>::insertHelper(AVLNode<T> *node, const T &data)
 {
 
     // Si el nodo es nulo, creamos uno nuevo
@@ -33,12 +58,12 @@ AVLNode<T> *AVLTree<T>::insertHelper(const T &data, AVLNode<T> *node)
     // Insertamos en el subárbol izquierdo
     if (data < node->getData())
     {
-        node->setLeftChild(insertHelper(data, node->getLeftChild()));
+        node->setLeftChild(insertHelper(node->getLeftChild(), data));
     }
     // Insertamos en el subárbol derecho
     else if (data > node->getData())
     {
-        node->setRightChild(insertHelper(data, node->getRightChild()));
+        node->setRightChild(insertHelper(node->getRightChild(), data));
     }
     // Si el elemento ya existe, no hacemos nada
     else
@@ -351,7 +376,7 @@ bool AVLTree<T>::insert(const T &data)
     }
 
     int prevHeight = root->getHeight();
-    root = insertHelper(data, root);
+    root = insertHelper(root, data);
     int newHeight = root->getHeight();
     return newHeight > prevHeight;
 }
