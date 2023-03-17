@@ -67,28 +67,31 @@ AVLNode<T> *AVLTree<T>::removeHelper(AVLNode<T> *node, const T &data)
     }
     else
     {
-        AVLNode<T> *leftChild = node->getLeftChild();
-        AVLNode<T> *rightChild = node->getRightChild();
-        if (leftChild == nullptr && rightChild == nullptr)
+        if (node->getLeftChild() == nullptr && node->getRightChild() == nullptr)
         {
             delete node;
-            return nullptr;
+            node = nullptr;
+            return node;
         }
-        else if (leftChild == nullptr)
+        else if (node->getLeftChild() == nullptr)
         {
-            delete node;
-            return rightChild;
+            AVLNode<T> *temp = node;
+            node = node->getRightChild();
+            delete temp;
+            return node;
         }
-        else if (rightChild == nullptr)
+        else if (node->getRightChild() == nullptr)
         {
-            delete node;
-            return leftChild;
+            AVLNode<T> *temp = node;
+            node = node->getLeftChild();
+            delete temp;
+            return node;
         }
         else
         {
-            AVLNode<T> *maxNode = findLargestNode(leftChild);
+            AVLNode<T> *maxNode = findLargestNode(node->getLeftChild());
             node->setData(maxNode->getData());
-            node->setRightChild(removeHelper(leftChild, maxNode->getData()));
+            node->setLeftChild(removeHelper(node->getLeftChild(), maxNode->getData()));
         }
     }
     return balance(node);
