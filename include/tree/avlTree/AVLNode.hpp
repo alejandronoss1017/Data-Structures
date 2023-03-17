@@ -1,6 +1,11 @@
 #if !defined(DATA_STRUCTURES_AVL_NODE_HPP)
 #define DATA_STRUCTURES_AVL_NODE_HPP
 
+/**
+ * @brief Template class for a AVLNode.
+ *
+ * @tparam T Primitive types or classes.
+ */
 template <typename T>
 class AVLNode
 {
