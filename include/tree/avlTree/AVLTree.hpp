@@ -1,7 +1,7 @@
 #if !defined(DATA_STRUCTURES_AVL_TREE_HPP)
 #define DATA_STRUCTURES_AVL_TREE_HPP
 
-#include <ostream>
+#include <iostream>
 #include "AVLNode.hpp"
 
 using namespace std;
@@ -13,7 +13,6 @@ protected:
     AVLNode<T> *root;
 
 private:
-    // TODO: Change order of params -> ALVNode, &data
     AVLNode<T> *insertHelper(const T &data, AVLNode<T> *node);
 
     AVLNode<T> *removeHelper(AVLNode<T> *node, const T &data);
@@ -46,7 +45,9 @@ private:
 
     void traverseInOrderHelper(AVLNode<T> *node, ostream &os) const;
 
-    // TODO: preorder and postorder methods
+    void traversePreOrderHelper(AVLNode<T> *node) const;
+
+    void traversePostOrderHelper(AVLNode<T> *node) const;
 
     // TODO: comment methods, change spanish to english comments
 public:
@@ -58,16 +59,18 @@ public:
 
     bool insert(const T &data);
 
-    // TODO: Implement remove method
     bool remove(const T &data);
 
     void clear();
 
     bool find(const T &data) const;
 
+    void traversePreOrder();
+
+    void traversePostOrder();
+
     bool empty() const;
 
-    // TODO: smallest,largest and overloads
     T smallest() const;
 
     T largest() const;
@@ -75,7 +78,9 @@ public:
     int height() const;
 
     AVLTree<T> &operator=(const AVLTree<T> &otherTree);
+
     bool operator==(const AVLTree<T> &otherTree) const;
+
     bool operator!=(const AVLTree<T> &otherTree) const;
 
     bool operator<(const AVLTree &otherTree) const;
