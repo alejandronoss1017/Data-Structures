@@ -6,6 +6,11 @@
 
 using namespace std;
 
+/**
+ * @brief Template class of a AVL Tree.
+ *
+ * @tparam T Primitive types or classes.
+ */
 template <typename T>
 class AVLTree
 {
@@ -28,6 +33,8 @@ private:
     int balanceFactor(AVLNode<T> *node) const;
 
     bool emptyHelper(AVLNode<T> *node) const;
+
+    void deleteTree(AVLNode<T> *node);
 
     void clearHelper(AVLNode<T> *node);
 
