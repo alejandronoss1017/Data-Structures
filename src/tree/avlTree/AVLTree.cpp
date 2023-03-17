@@ -1,4 +1,5 @@
 #include "../../../include/tree/avlTree/AVLTree.hpp"
+#include "AVLTree.hpp"
 
 template <typename T>
 AVLTree<T>::AVLTree()
@@ -90,6 +91,17 @@ bool AVLTree<T>::emptyHelper(AVLNode<T> *node) const
         return true;
     }
     return false;
+}
+
+template <typename T>
+void AVLTree<T>::clearHelper(AVLNode<T> *node)
+{
+    if (node != nullptr)
+    {
+        clearHelper(node->getLeftChild());
+        clearHelper(node->getRightChild());
+        delete node;
+    }
 }
 
 template <typename T>
@@ -220,6 +232,13 @@ bool AVLTree<T>::remove(const T &data)
 {
     return false;
 }
+template <typename T>
+void AVLTree<T>::clear()
+{
+    clearHelper(root);
+    root = nullptr;
+}
+
 template <typename T>
 bool AVLTree<T>::find(const T &data) const
 {

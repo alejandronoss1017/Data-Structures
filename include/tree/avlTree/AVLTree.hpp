@@ -24,6 +24,8 @@ private:
 
     bool emptyHelper(AVLNode<T> *node) const;
 
+    void clearHelper(AVLNode<T> *node);
+
     AVLNode<T> *balance(AVLNode<T> *node);
 
     AVLNode<T> *rotateRight(AVLNode<T> *node);
@@ -48,6 +50,8 @@ public:
 
     // TODO: Implement remove method
     bool remove(const T &data);
+
+    void clear();
 
     bool find(const T &data) const;
 
