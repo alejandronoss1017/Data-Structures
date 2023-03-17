@@ -172,6 +172,23 @@ void AVLTree<T>::clearHelper(AVLNode<T> *node)
 }
 
 template <typename T>
+bool AVLTree<T>::equals(const AVLNode<T> *node1, const AVLNode<T> *node2) const
+{
+    if (node1 == nullptr && node2 == nullptr)
+    {
+        return true;
+    }
+    if (node1 == nullptr || node2 == nullptr)
+    {
+        return false;
+    }
+
+    return node1->getData() == node2->getData() &&
+           equals(node1->getLeftChild(), node2->getLeftChild()) &&
+           equals(node1->getRightChild(), node2->getRightChild());
+}
+
+template <typename T>
 AVLNode<T> *AVLTree<T>::balance(AVLNode<T> *node)
 {
     int bf = balanceFactor(node);
@@ -220,6 +237,20 @@ AVLNode<T> *AVLTree<T>::rotateLeft(AVLNode<T> *node)
     updateHeight(parent);
     return parent;
 }
+template <typename T>
+AVLNode<T> *AVLTree<T>::copyTree(AVLNode<T> *node) const
+{
+    if (node == nullptr)
+    {
+        return nullptr;
+    }
+
+    auto *newNode = new AVLNode<T>(node->getData(), node->getHeight(),
+                                   node->getLeftChild(), node->getRightChild());
+
+    return newNode;
+}
+
 template <typename T>
 bool AVLTree<T>::findNodeHelper(AVLNode<T> *node, const T &data) const
 {
@@ -292,6 +323,27 @@ int AVLTree<T>::height() const
     }
 
     return root->getHeight();
+}
+template <typename T>
+AVLTree<T> &AVLTree<T>::operator=(const AVLTree<T> &otherTree)
+{
+    // Avoid self-assignment
+    if (this == &otherTree)
+    {
+        return *this;
+    }
+
+    // Delete current tree and copy other tree
+    delete (root);
+    root = copyTree(otherTree.root);
+
+    return *this;
+}
+
+template <typename T>
+bool AVLTree<T>::operator==(const AVLTree<T> &otherTree) const
+{
+    return equals(root, otherTree.root);
 }
 
 template <typename T>
