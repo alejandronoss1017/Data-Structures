@@ -29,10 +29,7 @@ AVLTree<T>::AVLTree(const T &data)
  * @tparam T Primitive types or classes.
  */
 template <typename T>
-AVLTree<T>::~AVLTree()
-{
-    deleteTree(root);
-}
+AVLTree<T>::~AVLTree() = default;
 
 /**
  * @brief Private method to create a new AVLNode and
@@ -49,35 +46,44 @@ template <typename T>
 AVLNode<T> *AVLTree<T>::insertHelper(AVLNode<T> *node, const T &data)
 {
 
-    // Si el nodo es nulo, creamos uno nuevo
+    // If the AVLNode is nullptr create a new one
     if (node == nullptr)
     {
         return new AVLNode<T>(data);
     }
 
-    // Insertamos en el subárbol izquierdo
+    // If data is less than node->data, search in left nodes
     if (data < node->getData())
     {
         node->setLeftChild(insertHelper(node->getLeftChild(), data));
     }
-    // Insertamos en el subárbol derecho
+    // If data is greater than node->data, search in right nodes
     else if (data > node->getData())
     {
         node->setRightChild(insertHelper(node->getRightChild(), data));
     }
-    // Si el elemento ya existe, no hacemos nada
+    // If element already exist return the node itself
     else
     {
         return node;
     }
 
-    // Actualizamos la altura del nodo actual
+    //  After insertion update all nodes heights and do balance
     updateHeight(node);
 
-    // Balanceamos el árbol
     return balance(node);
 }
 
+/**
+ * @brief Private method to remove a AVLNode that's inside
+ * the AVLTree. Once the AVLNode is removed the AVLTree will
+ *  update all nodes heights and do balance.
+ *
+ * @tparam T Primitive types or classes.
+ * @param node Root of the AVLTree to remove a AVLNode.
+ * @param data Value to be find inside the AVLTree and removed.
+ * @return AVLNode<T>*
+ */
 template <typename T>
 AVLNode<T> *AVLTree<T>::removeHelper(AVLNode<T> *node, const T &data)
 {
@@ -85,22 +91,27 @@ AVLNode<T> *AVLTree<T>::removeHelper(AVLNode<T> *node, const T &data)
     {
         return nullptr;
     }
+    // If data is less than node->data, search in left nodes and set a pointer
     else if (data < node->getData())
     {
         node->setLeftChild(removeHelper(node->getLeftChild(), data));
     }
+    // If data is greater than node->data, search in right nodes and set a pointer
     else if (data > node->getData())
     {
         node->setRightChild(removeHelper(node->getRightChild(), data));
     }
+    // Once the node is founded
     else
     {
+        // If is a leaf just delete that node and return nullptr
         if (node->getLeftChild() == nullptr && node->getRightChild() == nullptr)
         {
             delete node;
             node = nullptr;
             return node;
         }
+        // If that node just have one child
         else if (node->getLeftChild() == nullptr)
         {
             AVLNode<T> *temp = node;
@@ -189,19 +200,6 @@ bool AVLTree<T>::emptyHelper(AVLNode<T> *node) const
         return true;
     }
     return false;
-}
-
-template <typename T>
-void AVLTree<T>::deleteTree(AVLNode<T> *node)
-{
-    if (node == nullptr)
-    {
-        return;
-    }
-
-    deleteTree(node->getLeftChild());
-    deleteTree(node->getRightChild());
-    delete node;
 }
 
 template <typename T>

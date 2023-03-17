@@ -34,8 +34,6 @@ private:
 
     bool emptyHelper(AVLNode<T> *node) const;
 
-    void deleteTree(AVLNode<T> *node);
-
     void clearHelper(AVLNode<T> *node);
 
     bool equals(const AVLNode<T> *node1, const AVLNode<T> *node2) const;
