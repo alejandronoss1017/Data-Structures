@@ -18,7 +18,7 @@ protected:
     AVLNode<T> *root;
 
 private:
-    AVLNode<T> *insertHelper(const T &data, AVLNode<T> *node);
+    AVLNode<T> *insertHelper(AVLNode<T> *node, const T &data);
 
     AVLNode<T> *removeHelper(AVLNode<T> *node, const T &data);
 
