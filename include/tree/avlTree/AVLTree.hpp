@@ -13,44 +13,30 @@ protected:
     AVLNode<T> *root;
 
 private:
-    bool insertNode(const T &data, AVLNode<T> *node);
+    // TODO: Change order of params -> ALVNode, &data
+    AVLNode<T> *insertHelper(const T &data, AVLNode<T> *node);
 
     int heightHelper(AVLNode<T> *node) const;
 
     void updateHeight(AVLNode<T> *node);
 
-    // int rebalance(AVLNode<T> *node) const;
+    int balanceFactor(AVLNode<T> *node) const;
 
-    AVLNode<T> *rightRotation(AVLNode<T> *node);
+    bool emptyHelper(AVLNode<T> *node) const;
 
-    AVLNode<T> *leftRotation(AVLNode<T> *node);
+    AVLNode<T> *balance(AVLNode<T> *node);
 
-    AVLNode<T> *rightLeftRotation(AVLNode<T> *node);
+    AVLNode<T> *rotateRight(AVLNode<T> *node);
 
-    AVLNode<T> *leftRightRotation(AVLNode<T> *node);
+    AVLNode<T> *rotateLeft(AVLNode<T> *node);
 
-    // void traversePreOrderHelper(AVLNode<T> *node);
+    bool findNodeHelper(AVLNode<T> *node, const T &data) const;
 
     void traverseInOrderHelper(AVLNode<T> *node, ostream &os) const;
 
-    // void traversePostOrderHelper(AVLNode<T> *node);
+    // TODO: preorder and postorder methods
 
-    // void deleteTree(AVLNode<T> *node);
-
-    // bool deleteNodeHelper(const T &data, AVLNode<T> *node);
-
-    // AVLNode<T> *findSmallestNode(AVLNode<T> *node);
-
-    // AVLNode<T> *findLargestNode(AVLNode<T> *node);
-
-    // bool findNodeHelper(const T &data, AVLNode<T> *node);
-
-    // AVLNode<T> *copyTree(AVLNode<T> *node) const;
-
-    // bool equals(const AVLNode<T> *node1, const AVLNode<T> *node2) const;
-
-    // bool emptyHelper(AVLNode<T> *node);
-
+    // TODO: comment methods, change spanish to english comments
 public:
     AVLTree();
 
@@ -60,9 +46,31 @@ public:
 
     bool insert(const T &data);
 
+    // TODO: Implement remove method
     bool remove(const T &data);
 
-    int height();
+    bool find(const T &data) const;
+
+    bool empty() const;
+
+    // TODO: smallest,largest and overloads
+    T smallest() const;
+
+    T largest() const;
+
+    int height() const;
+
+    AVLTree<T> &operator=(const AVLTree<T> &otherTree);
+    bool operator==(const AVLTree<T> &otherTree) const;
+    bool operator!=(const AVLTree<T> &otherTree) const;
+
+    bool operator<(const AVLTree &otherTree) const;
+
+    bool operator>(const AVLTree &otherTree) const;
+
+    bool operator<=(const AVLTree &otherTree) const;
+
+    bool operator>=(const AVLTree &otherTree) const;
 
     template <typename U>
     friend ostream &operator<<(ostream &os, const AVLTree<U> &tree);
