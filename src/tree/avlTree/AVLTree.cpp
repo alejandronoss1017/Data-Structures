@@ -324,6 +324,17 @@ bool AVLTree<T>::empty() const
 {
     return emptyHelper(root);
 }
+template <typename T>
+T AVLTree<T>::smallest() const
+{
+    return T(findSmallestNode(root)->getData());
+}
+
+template <typename T>
+T AVLTree<T>::largest() const
+{
+    return T(findLargestNode(root)->getData());
+}
 
 template <typename U>
 ostream &operator<<(ostream &os, const AVLTree<U> &tree)
