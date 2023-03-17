@@ -14,7 +14,10 @@ AVLTree<T>::AVLTree(const T &data)
 }
 
 template <typename T>
-AVLTree<T>::~AVLTree() = default;
+AVLTree<T>::~AVLTree()
+{
+    deleteTree(root);
+}
 
 // Removed inline keyword and set highs
 template <typename T>
@@ -161,6 +164,19 @@ bool AVLTree<T>::emptyHelper(AVLNode<T> *node) const
         return true;
     }
     return false;
+}
+
+template <typename T>
+void AVLTree<T>::deleteTree(AVLNode<T> *node)
+{
+    if (node == nullptr)
+    {
+        return;
+    }
+
+    deleteTree(node->getLeftChild());
+    deleteTree(node->getRightChild());
+    delete node;
 }
 
 template <typename T>
