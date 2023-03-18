@@ -54,7 +54,6 @@ private:
 
     void traversePostOrderHelper(AVLNode<T> *node) const;
 
-    // TODO: comment methods, change spanish to english comments
 public:
     AVLTree();
 
