@@ -75,9 +75,9 @@ public:
 
     bool empty() const;
 
-    T smallest() const;
+    T smallest();
 
-    T largest() const;
+    T largest();
 
     int height() const;
 
