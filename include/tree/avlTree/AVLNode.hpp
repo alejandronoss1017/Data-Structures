@@ -1,6 +1,11 @@
 #if !defined(DATA_STRUCTURES_AVL_NODE_HPP)
 #define DATA_STRUCTURES_AVL_NODE_HPP
 
+/**
+ * @brief Template class for a AVLNode.
+ *
+ * @tparam T Primitive types or classes.
+ */
 template <typename T>
 class AVLNode
 {
@@ -13,9 +18,12 @@ protected:
 public:
     /*  Constructors  */
     explicit AVLNode(const T &data);
+    AVLNode(const T &data, int height, AVLNode<T> *leftChild, AVLNode<T> *rightChild);
 
     /*  Getters and Setters  */
     T getData() const;
+
+    virtual ~AVLNode();
 
     int getHeight() const;
 
