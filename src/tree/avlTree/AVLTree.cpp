@@ -263,7 +263,7 @@ void AVLTree<T>::clearHelper(AVLNode<T> *node)
     {
         clearHelper(node->getLeftChild());
         clearHelper(node->getRightChild());
-        delete node;
+        node->~AVLNode();
     }
 }
 
@@ -743,7 +743,7 @@ bool AVLTree<T>::empty() const
  * @return T The smallest value stored in the tree.
  */
 template <typename T>
-T AVLTree<T>::smallest() const
+T AVLTree<T>::smallest()
 {
     return T(findSmallestNode(root)->getData());
 }
@@ -755,7 +755,7 @@ T AVLTree<T>::smallest() const
  * @return T The largest value stored in the tree.
  */
 template <typename T>
-T AVLTree<T>::largest() const
+T AVLTree<T>::largest()
 {
     return T(findLargestNode(root)->getData());
 }
