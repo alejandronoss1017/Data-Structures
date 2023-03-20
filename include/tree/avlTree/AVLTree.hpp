@@ -99,7 +99,6 @@ public:
     friend ostream &operator<<(ostream &os, const AVLTree<U> &tree);
 };
 
-// This must removed when compiling in CMake
 #include "../../../src/tree/avlTree/AVLTree.tpp"
 
 #endif // DATA_STRUCTURES_AVL_TREE_HPP

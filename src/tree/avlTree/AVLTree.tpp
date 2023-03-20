@@ -1,3 +1,4 @@
+#include "../../../include/tree/avlTree/AVLTree.hpp"
 
 /**
  * @brief Construct a new AVLTree with nullptr root.

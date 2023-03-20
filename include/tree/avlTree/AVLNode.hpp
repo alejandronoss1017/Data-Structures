@@ -40,6 +40,6 @@ public:
     AVLNode<T> *getRightChild() const;
 };
 
-// This must removed when compiling in CMake
 #include "../../../src/tree/avlTree/AVLNode.tpp"
+
 #endif // DATA_STRUCTURES_AVL_NODE_HPP
