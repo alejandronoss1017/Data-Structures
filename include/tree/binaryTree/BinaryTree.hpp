@@ -91,6 +91,6 @@ public:
 };
 
 // This must removed when compiling in CMake
-#include "../../../src/tree/binaryTree/BinaryTree.cpp"
+#include "../../../src/tree/binaryTree/BinaryTree.tpp"
 
 #endif // DATA_STRUCTURES_BINARY_TREE_HPP

@@ -41,5 +41,5 @@ public:
 };
 
 // This must removed when compiling in CMake
-#include "../../../src/tree/avlTree/AVLNode.cpp"
+#include "../../../src/tree/avlTree/AVLNode.tpp"
 #endif // DATA_STRUCTURES_AVL_NODE_HPP
