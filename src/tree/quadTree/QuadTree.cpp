@@ -33,7 +33,14 @@ bool QuadTree::insert(const double &coordinateX, const double &coordinateY)
 
 bool QuadTree::remove(const double &coordinateX, const double &coordinateY)
 {
-    return false;
+    if (root == nullptr)
+    {
+        return false;
+    }
+
+    removeHelper(root, coordinateX, coordinateY);
+
+    return true;
 }
 
 bool QuadTree::find(const double &coordinateX, const double &coordinateY)
@@ -71,7 +78,7 @@ QuadNode *QuadTree::insertHelper(QuadNode *node, const double &coordinateX, cons
                 node->setChild(1, insertHelper(node->getChild(1), coordinateX, coordinateY));
             }
         }
-        else
+        else if (coordinateX > node->getCoordinateX())
         {
             if (coordinateY < node->getCoordinateY())
             {
@@ -82,6 +89,64 @@ QuadNode *QuadTree::insertHelper(QuadNode *node, const double &coordinateX, cons
                 node->setChild(3, insertHelper(node->getChild(3), coordinateX, coordinateY));
             }
         }
+    }
+    return node;
+}
+
+QuadNode *QuadTree::removeHelper(QuadNode *node, const double &coordinateX, const double &coordinateY)
+{
+    if (node == nullptr)
+    {
+        return nullptr;
+    }
+    else if (coordinateX < node->getCoordinateX() && coordinateY < node->getCoordinateY())
+    {
+        if (coordinateY < node->getCoordinateY())
+        {
+            node->setChild(0, removeHelper(node->getChild(0), coordinateX, coordinateY));
+        }
+        else
+        {
+            node->setChild(1, removeHelper(node->getChild(1), coordinateX, coordinateY));
+        }
+    }
+    else if (coordinateX > node->getCoordinateX())
+    {
+        if (coordinateY < node->getCoordinateY())
+        {
+            node->setChild(2, removeHelper(node->getChild(2), coordinateX, coordinateY));
+        }
+        else
+        {
+            node->setChild(3, removeHelper(node->getChild(3), coordinateX, coordinateY));
+        }
+    }
+    else
+    {
+        if (node->isLeaf())
+        {
+            delete node;
+            node = nullptr;
+            nodeCount--;
+            pointCount--;
+            return node;
+        }
+        else
+        {
+            QuadNode *temp = findMinHelper(node->getChild(3));
+            node->setCoordinateX(temp->getCoordinateX());
+            node->setCoordinateY(temp->getCoordinateY());
+            node->setChild(3, removeHelper(node->getChild(3), temp->getCoordinateX(), temp->getCoordinateY()));
+        }
+    }
+    return node;
+}
+
+QuadNode *QuadTree::findMinHelper(QuadNode *node)
+{
+    while (node != nullptr && node->getChild(0) != nullptr)
+    {
+        node = node->getChild(0);
     }
     return node;
 }

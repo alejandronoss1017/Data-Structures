@@ -28,6 +28,8 @@ protected:
 
 private:
     QuadNode *insertHelper(QuadNode *node, const double &coordinateX, const double &coordinateY);
+    QuadNode *removeHelper(QuadNode *node, const double &coordinateX, const double &coordinateY);
+    QuadNode *findMinHelper(QuadNode *node);
     void traverseInOrderHelper(QuadNode *node, ostream &os) const;
     void traversePreOrderHelper();
     void traversePostOrderHelper();
