@@ -8,23 +8,10 @@ class QuadTree
 protected:
     QuadNode *root;
 
-    //? Required: Profundidad máxima del Quadtree
     int maxDepth;
-
-    //? Required: Número máximo de puntos por nodo
     int maxPoints;
-
-    //? Required: Número total de nodos en el árbol
     int nodeCount;
-
-    //? Required: Número total de puntos en el árbol
     int pointCount;
-
-    //? Required: Coordenadas del área de interés (AOI)
-    double min_x_;
-    double min_y_;
-    double max_x_;
-    double max_y_;
 
 private:
     QuadNode *insertHelper(QuadNode *node, const double &coordinateX, const double &coordinateY);
@@ -32,6 +19,7 @@ private:
     QuadNode *findMinHelper(QuadNode *node);
     QuadNode *findMaxHelper(QuadNode *node);
     QuadNode *findHelper(QuadNode *node, const double &coordinateX, const double &coordinateY);
+    QuadNode *clearHelper(QuadNode *node);
     void traverseInOrderHelper(QuadNode *node, ostream &os) const;
     void traversePreOrderHelper();
     void traversePostOrderHelper();
@@ -56,6 +44,7 @@ public:
     friend ostream &operator<<(ostream &os, const QuadTree &tree);
 };
 
+// This must removed when compiling in CMake
 #include "../../../src/tree/quadTree/QuadTree.cpp"
 
 #endif // DATA_STRUCTURES_QUAD_TREE_HPP
