@@ -166,15 +166,29 @@ QuadNode *QuadTree::findHelper(QuadNode *node, const double &coordinateX, const 
     {
         return nullptr;
     }
-    else if ()
+    else if (coordinateX < node->getCoordinateX())
     {
+        if (coordinateY < node->getCoordinateY())
+        {
+            return findHelper(node->getChild(0), coordinateX, coordinateY);
+        }
+        else
+        {
+            return findHelper(node->getChild(1), coordinateX, coordinateY);
+        }
     }
-    else if ()
+    else if (coordinateX > node->getCoordinateX())
     {
+        if (coordinateY < node->getCoordinateY())
+        {
+            return findHelper(node->getChild(2), coordinateX, coordinateY);
+        }
+        else
+        {
+            return findHelper(node->getChild(3), coordinateX, coordinateY);
+        }
     }
-    else
-    {
-    }
+    return node;
 }
 
 void QuadTree::traverseInOrderHelper(QuadNode *node, ostream &os) const
