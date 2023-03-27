@@ -6,6 +6,8 @@ QuadTree::QuadTree()
     QuadTree::root = nullptr;
     QuadTree::nodeCount = 0;
     QuadTree::pointCount = 0;
+    QuadTree::maxPoints = 50;
+    QuadTree::maxDepth = 50;
 }
 
 QuadTree::QuadTree(const double &coordinateX, const double &coordinateY)
@@ -13,6 +15,8 @@ QuadTree::QuadTree(const double &coordinateX, const double &coordinateY)
     QuadTree::root = new QuadNode(coordinateX, coordinateY);
     QuadTree::nodeCount = 1;
     QuadTree::pointCount = 1;
+    QuadTree::maxPoints = 50;
+    QuadTree::maxDepth = 50;
 }
 
 QuadTree::~QuadTree() = default;
@@ -64,6 +68,18 @@ bool QuadTree::empty()
 
 void QuadTree::clear()
 {
+    root = clearHelper(root);
+    QuadTree::nodeCount = 0;
+    QuadTree::pointCount = 0;
+}
+
+int QuadTree::height()
+{
+    if (root == nullptr)
+    {
+        return 0;
+    }
+    return QuadTree::nodeCount;
 }
 
 QuadNode *QuadTree::insertHelper(QuadNode *node, const double &coordinateX, const double &coordinateY)
@@ -76,7 +92,12 @@ QuadNode *QuadTree::insertHelper(QuadNode *node, const double &coordinateX, cons
     }
     else
     {
-        if (coordinateX < node->getCoordinateX())
+        // If the point already exists, return the node
+        if (coordinateX == node->getCoordinateX() && coordinateY == node->getCoordinateY())
+        {
+            return node;
+        }
+        else if (coordinateX < node->getCoordinateX())
         {
             if (coordinateY < node->getCoordinateY())
             {
@@ -92,6 +113,18 @@ QuadNode *QuadTree::insertHelper(QuadNode *node, const double &coordinateX, cons
             if (coordinateY < node->getCoordinateY())
             {
                 node->setChild(2, insertHelper(node->getChild(2), coordinateX, coordinateY));
+            }
+            else
+            {
+                node->setChild(3, insertHelper(node->getChild(3), coordinateX, coordinateY));
+            }
+        }
+        // If coordinateX == node->getCoordinateX() && coordinateY != node->getCoordinateY()
+        else
+        {
+            if (coordinateY < node->getCoordinateY())
+            {
+                node->setChild(0, insertHelper(node->getChild(0), coordinateX, coordinateY));
             }
             else
             {
@@ -197,6 +230,21 @@ QuadNode *QuadTree::findHelper(QuadNode *node, const double &coordinateX, const 
             return findHelper(node->getChild(3), coordinateX, coordinateY);
         }
     }
+    return node;
+}
+
+QuadNode *QuadTree::clearHelper(QuadNode *node)
+{
+    if (node == nullptr)
+    {
+        return nullptr;
+    }
+    clearHelper(node->getChild(0));
+    clearHelper(node->getChild(1));
+    clearHelper(node->getChild(2));
+    clearHelper(node->getChild(3));
+    delete node;
+    node = nullptr;
     return node;
 }
 
