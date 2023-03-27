@@ -44,6 +44,7 @@ public:
     bool isLeaf() const;
 };
 
+// This must removed when compiling in CMake
 #include "../../../src/tree/quadTree/QuadNode.cpp"
 
 #endif // DATA_STRUCTURES_QUAD_NODE_HPP
