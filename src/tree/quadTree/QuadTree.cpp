@@ -99,7 +99,7 @@ QuadNode *QuadTree::removeHelper(QuadNode *node, const double &coordinateX, cons
     {
         return nullptr;
     }
-    else if (coordinateX < node->getCoordinateX() && coordinateY < node->getCoordinateY())
+    else if (coordinateX < node->getCoordinateX())
     {
         if (coordinateY < node->getCoordinateY())
         {
@@ -149,6 +149,32 @@ QuadNode *QuadTree::findMinHelper(QuadNode *node)
         node = node->getChild(0);
     }
     return node;
+}
+
+QuadNode *QuadTree::findMaxHelper(QuadNode *node)
+{
+    while (node != nullptr && node->getChild(3) != nullptr)
+    {
+        node = node->getChild(3);
+    }
+    return node;
+}
+
+QuadNode *QuadTree::findHelper(QuadNode *node, const double &coordinateX, const double &coordinateY)
+{
+    if (node == nullptr)
+    {
+        return nullptr;
+    }
+    else if ()
+    {
+    }
+    else if ()
+    {
+    }
+    else
+    {
+    }
 }
 
 void QuadTree::traverseInOrderHelper(QuadNode *node, ostream &os) const
