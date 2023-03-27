@@ -56,3 +56,15 @@ void QuadNode::setChild(const int &index, QuadNode *child)
 {
     QuadNode::children[index] = child;
 }
+
+bool QuadNode::isLeaf() const
+{
+    for (auto &&child : QuadNode::children)
+    {
+        if (child != nullptr)
+        {
+            return false;
+        }
+    }
+    return true;
+}

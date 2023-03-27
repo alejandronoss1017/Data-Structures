@@ -10,7 +10,7 @@ class QuadNode
 protected:
     double coordinateX, coordinateY;
 
-    // 4 children, 0 = NW (North West), 1 = NE (North East), 2 = SW (South West), 3 = SE (South East)
+    // 4 children, 0 = SW (South West), 1 = NW (North West), 2 = SE (South East), 3 = NE (North East)
     array<QuadNode *, 4> children;
 
 public:
@@ -39,6 +39,9 @@ public:
     void setChildren(const array<QuadNode *, 4> &children);
 
     void setChild(const int &index, QuadNode *child);
+
+    /*  Other Methods  */
+    bool isLeaf() const;
 };
 
 #include "../../../src/tree/quadTree/QuadNode.cpp"
