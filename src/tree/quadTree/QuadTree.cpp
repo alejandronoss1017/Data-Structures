@@ -45,7 +45,16 @@ bool QuadTree::remove(const double &coordinateX, const double &coordinateY)
 
 bool QuadTree::find(const double &coordinateX, const double &coordinateY)
 {
-    return false;
+    if (root == nullptr)
+    {
+        return false;
+    }
+    else if (findHelper(root, coordinateX, coordinateY) == nullptr)
+    {
+        return false;
+    }
+
+    return true;
 }
 
 bool QuadTree::empty()
