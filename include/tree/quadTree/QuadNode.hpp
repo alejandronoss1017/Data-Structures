@@ -5,30 +5,42 @@
 
 using namespace std;
 
-template <typename T>
 class QuadNode
 {
 protected:
-    T data;
+    double coordinateX, coordinateY;
+
+    // 4 children, 0 = NW (North West), 1 = NE (North East), 2 = SW (South West), 3 = SE (South East)
     array<QuadNode *, 4> children;
 
 public:
-    QuadNode(T data);
+    /*  Constructors and Destructors  */
+    QuadNode();
 
-    QuadNode(T data, array<QuadNode *, 4> children);
+    QuadNode(const double &coordinateX, const double &coordinateY);
+
+    QuadNode(const double &coordinateX, const double &coordinateY, const array<QuadNode *, 4> &children);
 
     ~QuadNode();
 
-    T getData() const;
+    /*  Getters and Setters  */
+    double getCoordinateX();
 
-    void setData(T data);
+    double getCoordinateY();
 
-    const array<QuadNode *, 4> &getChildren() const;
+    array<QuadNode *, 4> getChildren();
+
+    QuadNode *getChild(const int &index);
+
+    void setCoordinateX(const double &coordinateX);
+
+    void setCoordinateY(const double &coordinateY);
 
     void setChildren(const array<QuadNode *, 4> &children);
 
+    void setChild(const int &index, QuadNode *child);
 };
 
-#include "../../../src/tree/quadTree/QuadNode.tpp"
+#include "../../../src/tree/quadTree/QuadNode.cpp"
 
 #endif // DATA_STRUCTURES_QUAD_NODE_HPP
