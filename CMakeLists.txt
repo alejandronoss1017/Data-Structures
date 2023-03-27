@@ -23,8 +23,8 @@ add_library(BINARY_NODE SHARED ${INCLUDE_DIR}/tree/binaryTree/BinaryNode.hpp ${S
 add_library(BINARY_TREE SHARED ${INCLUDE_DIR}/tree/binaryTree/BinaryTree.hpp ${SRC_DIR}/tree/binaryTree/BinaryTree.tpp)
 add_library(AVL_NODE SHARED ${INCLUDE_DIR}/tree/avlTree/AVLNode.hpp ${SRC_DIR}/tree/avlTree/AVLNode.tpp)
 add_library(AVL_TREE SHARED ${INCLUDE_DIR}/tree/avlTree/AVLTree.hpp ${SRC_DIR}/tree/avlTree/AVLTree.tpp)
-add_library(QUAD_NODE SHARED ${INCLUDE_DIR}/tree/quadTree/QuadNode.hpp ${SRC_DIR}/tree/quadTree/QuadNode.tpp)
-add_library(QUAD_TREE SHARED ${INCLUDE_DIR}/tree/quadTree/QuadTree.hpp ${SRC_DIR}/tree/quadTree/QuadTree.tpp)
+add_library(QUAD_NODE SHARED ${INCLUDE_DIR}/tree/quadTree/QuadNode.hpp ${SRC_DIR}/tree/quadTree/QuadNode.cpp)
+add_library(QUAD_TREE SHARED ${INCLUDE_DIR}/tree/quadTree/QuadTree.hpp ${SRC_DIR}/tree/quadTree/QuadTree.cpp)
 
 # add_library(GRAPH SHARED ${INCLUDE_DIR}/graph/Graph.hpp ${SRC_DIR}/graph/Graph.tpp)
 
