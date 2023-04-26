@@ -37,8 +37,6 @@ set_target_properties(AVL_TREE PROPERTIES LINKER_LANGUAGE CXX)
 add_executable(avltest ${TEST_DIR}/treeTest/avlTreeTest/test.cpp)
 target_link_libraries(avltest PRIVATE stdc++ AVL_TREE)
 
-add_executable(main main.cpp ${SRC_DIR}/tree/quadTree/QuadTree.cpp)
-target_link_libraries(main PRIVATE QUAD_NODE QUAD_TREE)
 
 # Add a executable file as a test
 add_test(NAME AVL_TREE_TEST COMMAND avltest Catch2)
