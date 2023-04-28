@@ -29,12 +29,12 @@ using namespace std;
  *
  */
 
-template <typename T>
+template <typename K, typename T>
 class Graph
 {
 protected:
     bool directed;
-    map<string, Node<T>> nodes;
+    map<K, Node<T>> nodes;
     vector<vector<int>> edges;
 
 private:
@@ -44,12 +44,12 @@ public:
     /* Constructors and Destructors */
     Graph();
     Graph(bool directed);
-    Graph(map<string, Node<T>> nodes, vector<vector<int>> edges, bool directed);
+    Graph(map<K, Node<T>> nodes, vector<vector<int>> edges, bool directed);
     ~Graph();
 
     /* Getters and Setters */
-    map<string, Node<T>> getNodes() const;
-    void setNodes(map<string, Node<T>> nodes);
+    map<K, Node<T>> getNodes() const;
+    void setNodes(map<K, Node<T>> nodes);
 
     vector<vector<int>> getEdges() const;
     void setEdges(vector<vector<int>> edges);
@@ -57,17 +57,20 @@ public:
     bool isDirected() const;
 
     /* Operators */
+
+    Graph<K, T> &operator=(const Graph<K, T> &other);
+
     bool operator==(const Graph &rhs) const;
 
     bool operator!=(const Graph &rhs) const;
 
-    template <typename U>
-    friend ostream &operator<<(ostream &os, const Graph<U> &graph);
+    template <typename U, typename R>
+    friend ostream &operator<<(ostream &os, const Graph<U, R> &graph);
 
     /* Methods */
-    void addNode(string id, T data);
+    void addNode(K id, T data);
 
-    void addEdge(string id1, string id2, int weight);
+    void addEdge(K id1, K id2, int weight);
 };
 
 #include "../../src/graph/Graph.tpp"
