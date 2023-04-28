@@ -1,4 +1,7 @@
 template <typename T>
+Node<T>::Node() = default;
+
+template <typename T>
 Node<T>::Node(T data)
 {
     Node<T>::data = data;

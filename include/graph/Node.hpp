@@ -27,6 +27,7 @@ private:
 
 public:
     /* Constructors and Destructors */
+    Node();
     Node(T data);
     Node(string id, int matrixId, T data);
 
