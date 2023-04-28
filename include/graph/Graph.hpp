@@ -23,12 +23,11 @@ using namespace std;
  * is connected to the first node. The value of the matrix is
  * the weight of the edge.
  *
- *
+ * @tparam K Key is the type of the key of the node.
  * @tparam T Data is the data of the node.
  *
  *
  */
-
 template <typename K, typename T>
 class Graph
 {
