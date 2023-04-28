@@ -9,6 +9,7 @@
 #include <algorithm>
 
 #include "Node.hpp"
+#include "Edge.hpp"
 
 using namespace std;
 
@@ -24,7 +25,7 @@ using namespace std;
  * the weight of the edge.
  *
  * @tparam K Key is the type of the key of the node.
- * @tparam T Data is the data of the node.
+ * @tparam T Data is the type of the data of the node.
  *
  *
  */
@@ -32,28 +33,23 @@ template <typename K, typename T>
 class Graph
 {
 protected:
-    bool directed;
     map<K, Node<T>> nodes;
-    vector<vector<int>> edges;
+    map<string, Edge<T>> edges;
+    // vector<vector<int>> edges;
 
 private:
-    void addRowAndColumn();
-
 public:
     /* Constructors and Destructors */
     Graph();
-    Graph(bool directed);
-    Graph(map<K, Node<T>> nodes, vector<vector<int>> edges, bool directed);
+    Graph(map<K, Node<T>> nodes, map<string, Edge<T>> edges);
     ~Graph();
 
     /* Getters and Setters */
     map<K, Node<T>> getNodes() const;
     void setNodes(map<K, Node<T>> nodes);
 
-    vector<vector<int>> getEdges() const;
-    void setEdges(vector<vector<int>> edges);
-
-    bool isDirected() const;
+    map<string, Edge<T>> getEdges() const;
+    void setEdges(map<string, Edge<T>> edges);
 
     /* Operators */
 
@@ -69,7 +65,9 @@ public:
     /* Methods */
     void addNode(K id, T data);
 
-    void addEdge(K id1, K id2, int weight);
+    void addEdge(K id1, K id2, double weight);
+
+    void addEdge(K id1, K id2, double weight, bool directed);
 };
 
 #include "../../src/graph/Graph.tpp"
