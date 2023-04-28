@@ -58,11 +58,11 @@ public:
 
     /* Operators */
 
-    Graph<K, T> &operator=(const Graph<K, T> &other);
+    Graph<K, T> &operator=(const Graph<K, T> &otherGraph);
 
-    bool operator==(const Graph &rhs) const;
+    bool operator==(const Graph &otherGraph) const;
 
-    bool operator!=(const Graph &rhs) const;
+    bool operator!=(const Graph &otherGraph) const;
 
     template <typename U, typename R>
     friend ostream &operator<<(ostream &os, const Graph<U, R> &graph);

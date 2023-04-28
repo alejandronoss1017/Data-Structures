@@ -120,18 +120,18 @@ bool Graph<K, T>::isDirected() const
 }
 
 template <typename K, typename T>
-Graph<K, T> &Graph<K, T>::operator=(const Graph<K, T> &other)
+Graph<K, T> &Graph<K, T>::operator=(const Graph<K, T> &otherGraph)
 {
-    if (this == &other)
+    if (this == &otherGraph)
     {
         return *this;
     }
 
-    directed = other.directed;
+    directed = otherGraph.directed;
 
-    nodes = other.nodes;
+    nodes = otherGraph.nodes;
 
-    edges = other.edges;
+    edges = otherGraph.edges;
 
     return *this;
 }
@@ -144,16 +144,16 @@ Graph<K, T> &Graph<K, T>::operator=(const Graph<K, T> &other)
  * @return true If the graphs are equal, false if aren't.
  */
 template <typename K, typename T>
-bool Graph<K, T>::operator==(const Graph &rhs) const
+bool Graph<K, T>::operator==(const Graph &otherGraph) const
 {
-    return nodes == rhs.nodes &&
-           edges == rhs.edges;
+    return nodes == otherGraph.nodes &&
+           edges == otherGraph.edges;
 }
 
 template <typename K, typename T>
-bool Graph<K, T>::operator!=(const Graph &rhs) const
+bool Graph<K, T>::operator!=(const Graph &otherGraph) const
 {
-    return !(rhs == *this);
+    return !(otherGraph == *this);
 }
 
 template <typename U, typename R>
