@@ -25,12 +25,16 @@ add_library(AVL_NODE SHARED ${INCLUDE_DIR}/tree/avlTree/AVLNode.hpp ${SRC_DIR}/t
 add_library(AVL_TREE SHARED ${INCLUDE_DIR}/tree/avlTree/AVLTree.hpp ${SRC_DIR}/tree/avlTree/AVLTree.tpp)
 add_library(QUAD_NODE SHARED ${SRC_DIR}/tree/quadTree/QuadNode.cpp)
 add_library(QUAD_TREE SHARED ${SRC_DIR}/tree/quadTree/QuadTree.cpp)
+add_library(GRAPH_NODE SHARED ${INCLUDE_DIR}/graph/Node.hpp ${SRC_DIR}/graph/Node.tpp)
+add_library(GRAPH SHARED ${INCLUDE_DIR}/graph/Graph.hpp ${SRC_DIR}/graph/graph.tpp)
 
 # This property is used to specify the linker language to use for the target, becauese .tpp isn't by default 
 set_target_properties(BINARY_NODE PROPERTIES LINKER_LANGUAGE CXX)
 set_target_properties(BINARY_TREE PROPERTIES LINKER_LANGUAGE CXX)
 set_target_properties(AVL_NODE PROPERTIES LINKER_LANGUAGE CXX)
 set_target_properties(AVL_TREE PROPERTIES LINKER_LANGUAGE CXX)
+set_target_properties(GRAPH_NODE PROPERTIES LINKER_LANGUAGE CXX)
+set_target_properties(GRAPH PROPERTIES LINKER_LANGUAGE CXX)
 
 
 # Compile an executable file and link dependecies
