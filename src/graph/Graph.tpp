@@ -2,13 +2,13 @@
 /**
  * @brief Constructs a new object of the Graph class, by default
  * the graph is directed.
- *
+ * @tparam K Key is the type of the key of the node.
  * @tparam T Data is the data of the node.
  */
-template <typename T>
-Graph<T>::Graph()
+template <typename K, typename T>
+Graph<K, T>::Graph()
 {
-    Graph::nodes = map<string, Node<T>>();
+    Graph::nodes = map<K, Node<T>>();
     Graph::edges = vector<vector<int>>();
     Graph::directed = true;
 }
@@ -16,13 +16,14 @@ Graph<T>::Graph()
 /**
  * @brief Construct a new object of the Graph class, it receives if the graph is directed.
  *
+ * @tparam K Key is the type of the key of the node.
  * @tparam T Data is the data of the node.
  * @param directed Boolean that indicates if the graph is directed.
  */
-template <typename T>
-Graph<T>::Graph(bool directed)
+template <typename K, typename T>
+Graph<K, T>::Graph(bool directed)
 {
-    Graph::nodes = map<string, Node<T>>();
+    Graph::nodes = map<K, Node<T>>();
     Graph::edges = vector<vector<int>>();
     Graph::directed = directed;
 }
@@ -30,67 +31,133 @@ Graph<T>::Graph(bool directed)
 /**
  * @brief  Constructs a new object of the Graph class, it receives the nodes, edges and if the graph is directed.
  *
+ * @tparam K Key is the type of the key of the node.
  * @tparam T Data is the data of the node.
  * @param nodes Map of nodes, where the key is the id of the node and the value is the node.
  * @param edges Matrix of edges, where the first index is the id of the node and the second index is the id of the node that is connected to the first node. The value of the matrix is the weight of the edge.
  * @param directed Boolean that indicates if the graph is directed.
  */
-template <typename T>
-Graph<T>::Graph(map<string, Node<T>> nodes, vector<vector<int>> edges, bool directed)
+template <typename K, typename T>
+Graph<K, T>::Graph(map<K, Node<T>> nodes, vector<vector<int>> edges, bool directed)
 {
     Graph::nodes = nodes;
     Graph::edges = edges;
     Graph::directed = directed;
 }
 
-template <typename T>
-Graph<T>::~Graph() = default;
+/**
+ * @brief Destroy the Graph object
+ *
+ * @tparam K Key is the type of the key of the node.
+ * @tparam T Data is the data of the node.
+ */
+template <typename K, typename T>
+Graph<K, T>::~Graph() = default;
 
-template <typename T>
-map<string, Node<T>> Graph<T>::getNodes() const
+/**
+ * @brief Get the Nodes object
+ *
+ * @tparam K Key is the type of the key of the node.
+ * @tparam T Data is the data of the node.
+ * @return map<K, Node<T>> Map of nodes, where the key is the id of the node and the value is the node.
+ */
+template <typename K, typename T>
+map<K, Node<T>> Graph<K, T>::getNodes() const
 {
     return nodes;
 }
 
-template <typename T>
-void Graph<T>::setNodes(map<string, Node<T>> nodes)
+/**
+ * @brief Set the Nodes object
+ *
+ * @tparam K Key is the type of the key of the node.
+ * @tparam T Data is the data of the node.
+ * @param nodes Map of nodes, where the key is the id of the node and the value is the node.
+ */
+template <typename K, typename T>
+void Graph<K, T>::setNodes(map<K, Node<T>> nodes)
 {
     Graph::nodes = nodes;
 }
 
-template <typename T>
-vector<vector<int>> Graph<T>::getEdges() const
+/**
+ * @brief Get the Edges object
+ *
+ * @tparam K Key is the type of the key of the node.
+ * @tparam T Data is the data of the node.
+ * @return vector<vector<int>> Matrix of edges, where the first index is the id of the node and the second index is the id of the node that is connected to the first node. The value of the matrix is the weight of the edge.
+ */
+template <typename K, typename T>
+vector<vector<int>> Graph<K, T>::getEdges() const
 {
     return edges;
 }
 
-template <typename T>
-void Graph<T>::setEdges(vector<vector<int>> edges)
+/**
+ * @brief Set the Edges object
+ *
+ * @tparam K Key is the type of the key of the node.
+ * @tparam T Data is the data of the node.
+ * @param edges Matrix of edges, where the first index is the id of the node and the second index is the id of the node that is connected to the first node. The value of the matrix is the weight of the edge.
+ */
+template <typename K, typename T>
+void Graph<K, T>::setEdges(vector<vector<int>> edges)
 {
     Graph::edges = edges;
 }
 
-template <typename T>
-bool Graph<T>::isDirected() const
+/**
+ * @brief Get the boolean that indicates if the graph is directed.
+ *
+ * @tparam K Key is the type of the key of the node.
+ * @tparam T Data is the data of the node.
+ * @return true If the graph is directed, false if isn't.
+ */
+template <typename K, typename T>
+bool Graph<K, T>::isDirected() const
 {
     return directed;
 }
 
-template <typename T>
-bool Graph<T>::operator==(const Graph &rhs) const
+template <typename K, typename T>
+Graph<K, T> &Graph<K, T>::operator=(const Graph<K, T> &other)
+{
+    if (this == &other)
+    {
+        return *this;
+    }
+
+    directed = other.directed;
+
+    nodes = other.nodes;
+
+    edges = other.edges;
+
+    return *this;
+}
+
+/**
+ * @brief Equals operator overload, it compares if two graphs are equal.
+ * @tparam K Key is the type of the key of the node.
+ * @tparam T Data is the data of the node.
+ * @param rhs Graph to compare.
+ * @return true If the graphs are equal, false if aren't.
+ */
+template <typename K, typename T>
+bool Graph<K, T>::operator==(const Graph &rhs) const
 {
     return nodes == rhs.nodes &&
            edges == rhs.edges;
 }
 
-template <typename T>
-bool Graph<T>::operator!=(const Graph &rhs) const
+template <typename K, typename T>
+bool Graph<K, T>::operator!=(const Graph &rhs) const
 {
     return !(rhs == *this);
 }
 
-template <typename U>
-ostream &operator<<(ostream &os, const Graph<U> &graph)
+template <typename U, typename R>
+ostream &operator<<(ostream &os, const Graph<U, R> &graph)
 {
 
     os << "directed: " << (graph.directed ? "True" : "False") << endl;
@@ -114,8 +181,8 @@ ostream &operator<<(ostream &os, const Graph<U> &graph)
     return os;
 }
 
-template <typename T>
-void Graph<T>::addRowAndColumn()
+template <typename K, typename T>
+void Graph<K, T>::addRowAndColumn()
 {
     for (auto &edge : edges)
     {
@@ -126,12 +193,12 @@ void Graph<T>::addRowAndColumn()
     edges.push_back(newRow);
 }
 
-template <typename T>
-void Graph<T>::addNode(string id, T data)
+template <typename K, typename T>
+void Graph<K, T>::addNode(K id, T data)
 {
     Node node = Node(id, nodes.size(), data);
 
-    nodes.insert(pair<string, Node<T>>(id, node));
+    nodes.insert(pair<K, Node<T>>(id, node));
     addRowAndColumn();
 }
 
@@ -146,8 +213,8 @@ void Graph<T>::addNode(string id, T data)
  * @param id2 The id of the second node.
  * @param weight The weight of the edge.
  */
-template <typename T>
-void Graph<T>::addEdge(string id1, string id2, int weight)
+template <typename K, typename T>
+void Graph<K, T>::addEdge(K id1, K id2, int weight)
 {
     if (directed)
     {
