@@ -7,35 +7,43 @@
 using namespace std;
 
 /**
- * Node class for Graphs, contains id, matrixId and data.
+ *
+ * @brief Node class for Graphs, contains id, matrixId and data.
  *
  * Id is the id of the node in the graph.
  *
  * MatrixId is the id of the node in the adjacency matrix.
  *
- * @tparam T Data is the data of the node.
+ * data is the data of the node.
  *
+ * @tparam K is the type of the Id of the node.
+ * @tparam T is the data of the node.
  *
  */
-template <typename T>
+template <typename K, typename T>
 class Node
 {
 private:
-    string id;
+    // Id of the node.
+    K id;
+    // Id of the adjacency matrix.
     int matrixId;
+    // Data of the node.
     T data;
 
 public:
     /* Constructors and Destructors */
+
     Node();
     Node(T data);
-    Node(string id, int matrixId, T data);
+    Node(K id, int matrixId, T data);
 
     ~Node();
 
     /* Getters and Setters */
-    string getId() const;
-    void setId(string id);
+
+    K getId() const;
+    void setId(K id);
 
     int getMatrixId() const;
     void setMatrixId(int matrixId);
@@ -44,12 +52,13 @@ public:
     void setData(T data);
 
     /* Operators */
-    bool operator==(const Node &rhs) const;
+    
+    bool operator==(const Node<K, T> &otherNode) const;
 
-    bool operator!=(const Node &rhs) const;
+    bool operator!=(const Node<K, T> &otherNode) const;
 
-    template <typename U>
-    friend ostream &operator<<(ostream &os, const Node<U> &node);
+    template <typename U, typename L>
+    friend ostream &operator<<(ostream &os, const Node<U, L> &node);
 };
 
 #include "../../src/graph/Node.tpp"
