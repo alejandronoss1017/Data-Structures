@@ -351,3 +351,78 @@ bool Graph<K, T>::addEdge(Edge<K, T> edge)
 
     return false;
 }
+
+/**
+ * @brief This method removes a node from the graph.
+ *
+ * @tparam K Key is the type of the key of the node.
+ * @tparam T Data is the data of the node.
+ * @param id The id of the node to be removed.
+ * @return true If the node was removed, false if wasn't.
+ * @throws bad_alloc If the node doesn't exist.
+ */
+template <typename K, typename T>
+bool Graph<K, T>::removeNode(K id)
+{
+    Node<K, T> node;
+    string idString = "";
+
+    if (is_same<K, char>::value)
+    {
+        idString += id;
+    }
+    else if (is_arithmetic<K>::value)
+    {
+        idString = to_string(id);
+    }
+    else if (is_same<K, string>::value)
+    {
+        idString = id;
+    }
+
+    regex patternSource(idString + "-[[:alnum:]]+");
+    regex patternDestination("[[:alnum:]]+-" + idString);
+
+    try
+    {
+        node = nodes.find(id)->second;
+    }
+    catch (const bad_alloc &e)
+    {
+        std::cerr << "Error: " << e.what() << " Doesn't exist a node with the id" << endl;
+
+        return false;
+    }
+
+    for (auto it = edges.begin(); it != edges.end();)
+    {
+        if (regex_search(it->first, patternSource) || regex_search(it->first, patternDestination))
+        {
+            it = edges.erase(it);
+        }
+        else
+        {
+            ++it;
+        }
+    }
+
+    nodes.erase(id);
+
+    return true;
+}
+
+/**
+ * @brief This method removes a node from the graph.
+ *
+ * @tparam K            Key is the type of the key of the node.
+ * @tparam T            Data is the data of the node.
+ * @param id            The id of the node to be removed.
+ * @return true         If the node was removed.
+ * @return false        If the node wasn't removed.
+ * @throws bad_alloc    If the node doesn't exist.
+ */
+template <typename K, typename T>
+bool Graph<K, T>::removeNode(Node<K, T> id)
+{
+    return removeNode(id.getId());
+}
