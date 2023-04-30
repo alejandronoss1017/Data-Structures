@@ -215,7 +215,8 @@ bool Graph<K, T>::addNode(Node<K, T> node)
  * @param id1 The id of the first node.
  * @param id2 The id of the second node.
  * @param weight The weight of the edge.
- * @return true If the edge was added, false if wasn't.
+ * @return true If one of the edges were added
+ * @return false If none of the edges were added.
  *
  * @throws bad_alloc If the node doesn't exist.
  */
@@ -240,30 +241,41 @@ bool Graph<K, T>::addEdge(K id1, K id2, double weight)
     {
         string node1Id = "";
         string node2Id = "";
-        node1Id += node1.getId();
-        node2Id += node2.getId();
+        node1Id += id1;
+        node2Id += id2;
 
-        auto success = edges.insert(pair<string, Edge<K, T>>((node1Id + "-" + node2Id),
-                                                             Edge<K, T>((node1Id + "-" + node2Id), weight, node1, node2)));
-        success = edges.insert(pair<string, Edge<K, T>>((node2Id + "-" + node1Id),
-                                                        Edge<K, T>((node2Id + "-" + node1Id), weight, node2, node1)));
+        auto success1 = edges.insert(
+            pair<string, Edge<K, T>>(
+                (node1Id + "-" + node2Id), Edge<K, T>((node1Id + "-" + node2Id), weight, node1, node2)));
 
-        return success.second;
+        auto success2 = edges.insert(
+            pair<string, Edge<K, T>>(
+                (node2Id + "-" + node1Id), Edge<K, T>((node2Id + "-" + node1Id), weight, node2, node1)));
+
+        return (success1.second || success2.second);
     }
     else if (is_arithmetic<K>::value)
     {
-        auto success = edges.insert(pair<string, Edge<K, T>>(to_string(id1) + "-" + to_string(id2),
-                                                             Edge<K, T>((to_string(id1) + "-" + to_string(id2)), weight, node1, node2)));
-        success = edges.insert(pair<string, Edge<K, T>>(to_string(id2) + "-" + to_string(id1),
-                                                        Edge<K, T>((to_string(id2) + "-" + to_string(id1)), weight, node2, node1)));
+        auto success1 = edges.insert(
+            pair<string, Edge<K, T>>(
+                to_string(id1) + "-" + to_string(id2),
+                Edge<K, T>(to_string(id1) + "-" + to_string(id2), weight, node1, node2)));
 
-        return success.second;
+        auto success2 = edges.insert(
+            pair<string, Edge<K, T>>(
+                to_string(id2) + "-" + to_string(id1),
+                Edge<K, T>(to_string(id2) + "-" + to_string(id1), weight, node2, node1)));
+
+        return (success1.second || success2.second);
     }
 
-    auto success = edges.insert(pair<string, Edge<K, T>>(node1.getId() + "-" + node2.getId(), Edge<K, T>((node1.getId() + "-" + node2.getId()), weight, node1, node2)));
-    success = edges.insert(pair<string, Edge<K, T>>(node2.getId() + "-" + node1.getId(), Edge<K, T>((node2.getId() + "-" + node1.getId()), weight, node2, node1)));
+    auto success1 = edges.insert(
+        pair<string, Edge<K, T>>(id1 + "-" + id2, Edge<K, T>(id1 + "-" + id2, weight, node1, node2)));
 
-    return success.second;
+    auto success2 = edges.insert(
+        pair<string, Edge<K, T>>(id2 + "-" + id1, Edge<K, T>(id2 + "-" + id1, weight, node2, node1)));
+
+    return (success1.second || success2.second);
 }
 
 /**
@@ -280,7 +292,8 @@ bool Graph<K, T>::addEdge(K id1, K id2, double weight)
  * @param weight The weight of the edge.
  * @param directed If the relationship is directed or not. If it is false it
  * will only add the edge in one direction. Otherwise it will add the edge in both directions.
- * @return true If the edge was added, false if wasn't.
+ * @return true If one or both edges were added.
+ * @return false If both nodes weren't added.
  *
  * @throws bad_alloc If the node doesn't exist.
  *
@@ -291,40 +304,45 @@ bool Graph<K, T>::addEdge(K id1, K id2, double weight, bool directed)
     Node<K, T> node1;
     Node<K, T> node2;
 
-    try
+    if (directed)
     {
-        node1 = nodes.find(id1)->second;
-        node2 = nodes.find(id2)->second;
-    }
-    catch (const bad_alloc &e)
-    {
-        std::cerr << "Error: " << e.what() << " Doesn't exist a node with the id1 or id2" << endl;
 
-        return false;
-    }
+        try
+        {
+            node1 = nodes.find(id1)->second;
+            node2 = nodes.find(id2)->second;
+        }
+        catch (const bad_alloc &e)
+        {
+            std::cerr << "Error: " << e.what() << " Doesn't exist a node with the id1 or id2" << endl;
 
-    if (!directed)
-    {
+            return false;
+        }
 
         if (is_same<K, char>::value)
         {
             string node1Id = "";
             string node2Id = "";
-            node1Id += id1;
-            node2Id += id2;
+            node1Id += node1.getId();
+            node2Id += node2.getId();
 
-            auto success = edges.insert(pair<string, Edge<K, T>>((node1Id + "-" + node2Id), Edge<K, T>((node1Id + "-" + node2Id), weight, node1, node2)));
+            auto success = edges.insert(pair<string, Edge<K, T>>((node1Id + "-" + node2Id),
+                                                                 Edge<K, T>((node1Id + "-" + node2Id), weight, node1, node2)));
 
             return success.second;
         }
         else if (is_arithmetic<K>::value)
         {
-            auto success = edges.insert(pair<string, Edge<K, T>>(to_string(id1 + "-" + id2), Edge<K, T>(to_string(id1 + "-" + id2), weight, node1, node2)));
+            auto success = edges.insert(pair<string, Edge<K, T>>(to_string(id1) + "-" + to_string(id2),
+                                                                 Edge<K, T>((to_string(id1) + "-" + to_string(id2)), weight, node1, node2)));
 
             return success.second;
         }
-    }
 
+        auto success = edges.insert(pair<string, Edge<K, T>>(node1.getId() + "-" + node2.getId(), Edge<K, T>((node1.getId() + "-" + node2.getId()), weight, node1, node2)));
+
+        return success.second;
+    }
     return addEdge(id1, id2, weight);
 }
 
