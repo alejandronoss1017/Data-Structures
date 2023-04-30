@@ -7,8 +7,8 @@
 template <typename K, typename T>
 Graph<K, T>::Graph()
 {
-    Graph::nodes = map<K, Node<T>>();
-    Graph::edges = map<string, Edge<T>>();
+    Graph::nodes = map<K, Node<K, T>>();
+    Graph::edges = map<string, Edge<K, T>>();
 }
 
 /**
@@ -21,7 +21,7 @@ Graph<K, T>::Graph()
  * @param directed Boolean that indicates if the graph is directed.
  */
 template <typename K, typename T>
-Graph<K, T>::Graph(map<K, Node<T>> nodes, map<string, Edge<T>> edges)
+Graph<K, T>::Graph(map<K, Node<K, T>> nodes, map<string, Edge<K, T>> edges)
 {
     Graph::nodes = nodes;
     Graph::edges = edges;
@@ -44,7 +44,7 @@ Graph<K, T>::~Graph() = default;
  * @return map<K, Node<T>> Map of nodes, where the key is the id of the node and the value is the node.
  */
 template <typename K, typename T>
-map<K, Node<T>> Graph<K, T>::getNodes() const
+map<K, Node<K, T>> Graph<K, T>::getNodes() const
 {
     return nodes;
 }
@@ -57,7 +57,7 @@ map<K, Node<T>> Graph<K, T>::getNodes() const
  * @param nodes Map of nodes, where the key is the id of the node and the value is the node.
  */
 template <typename K, typename T>
-void Graph<K, T>::setNodes(map<K, Node<T>> nodes)
+void Graph<K, T>::setNodes(map<K, Node<K, T>> nodes)
 {
     Graph::nodes = nodes;
 }
@@ -71,7 +71,7 @@ void Graph<K, T>::setNodes(map<K, Node<T>> nodes)
  *  the value is the edge.
  */
 template <typename K, typename T>
-map<string, Edge<T>> Graph<K, T>::getEdges() const
+map<string, Edge<K, T>> Graph<K, T>::getEdges() const
 {
     return edges;
 }
@@ -85,7 +85,7 @@ map<string, Edge<T>> Graph<K, T>::getEdges() const
  *  the value is the edge.
  */
 template <typename K, typename T>
-void Graph<K, T>::setEdges(map<string, Edge<T>> edges)
+void Graph<K, T>::setEdges(map<string, Edge<K, T>> edges)
 {
     Graph::edges = edges;
 }
@@ -170,37 +170,39 @@ ostream &operator<<(ostream &os, const Graph<U, R> &graph)
 }
 
 /**
- * @brief Add a node to the graph, if the type of the key is not string, it converts it to string.
- *  This will be used to add the node to the map of nodes. The id of the node is the key of the map.
- * The node is added to the map of nodes.
+ * @brief Add a node to the graph. The id of the node is the key of the map.
  *
  * @tparam K Key is the type of the key of the node.
  * @tparam T Data is the data of the node.
  * @param id Id of the node.
  * @param data Data of the node.
+ * @return true If the node was added, false if wasn't.
  */
 template <typename K, typename T>
-void Graph<K, T>::addNode(K id, T data)
+bool Graph<K, T>::addNode(K id, T data)
 {
-    /*
-        constexpr is used to define a compile-time constant expression that is
-        evaluated at compile time to determine if the type of K is equal to string.
+    Node<K, T> node = Node<K, T>(id, nodes.size(), data);
+    auto success = nodes.insert(pair<K, Node<K, T>>(id, node));
 
-        The expression is_same_v<K, string> uses the type trait is_same to check if
-        the type of K is the same as the type string. It returns a bool value indicating
-        whether the types are the same or not.
-    */
-    if constexpr (is_same_v<K, string>)
-    {
-        Node<T> node = Node(id, nodes.size(), data);
-        nodes.insert(pair<K, Node<T>>(id, node));
-    }
-    else
-    {
+    return success.second;
+}
 
-        Node<T> node = Node(to_string(id), nodes.size(), data);
-        nodes.insert(pair<K, Node<T>>(id, node));
-    }
+/**
+ * @brief Add a node to the graph. The id of the node is the key of the map.
+ *
+ * @tparam K            Key is the type of the key of the node.
+ * @tparam T            Data is the data of the node.
+ * @param node          Node to add.
+ * @return true         If the node was added.
+ * @return false        False if wasn't added.
+ */
+template <typename K, typename T>
+bool Graph<K, T>::addNode(Node<K, T> node)
+{
+
+    auto success = nodes.insert(pair<K, Node<K, T>>(node.getId(), node));
+
+    return success.second;
 }
 
 /**
@@ -213,18 +215,55 @@ void Graph<K, T>::addNode(K id, T data)
  * @param id1 The id of the first node.
  * @param id2 The id of the second node.
  * @param weight The weight of the edge.
+ * @return true If the edge was added, false if wasn't.
+ *
+ * @throws bad_alloc If the node doesn't exist.
  */
 template <typename K, typename T>
-void Graph<K, T>::addEdge(K id1, K id2, double weight)
+bool Graph<K, T>::addEdge(K id1, K id2, double weight)
 {
+    Node<K, T> node1;
+    Node<K, T> node2;
+    try
+    {
+        node1 = nodes.find(id1)->second;
+        node2 = nodes.find(id2)->second;
+    }
+    catch (const bad_alloc &e)
+    {
+        std::cerr << "Error: " << e.what() << " Doesn't exist a node with the id1 or id2" << endl;
 
-    Node<T> node1 = nodes.find(id1)->second;
-    Node<T> node2 = nodes.find(id2)->second;
+        return false;
+    }
 
-    string edgeId = node1.getId() + "-" + node2.getId();
+    if (is_same<K, char>::value)
+    {
+        string node1Id = "";
+        string node2Id = "";
+        node1Id += node1.getId();
+        node2Id += node2.getId();
 
-    edges.insert(pair<string, Edge<T>>(edgeId, Edge<T>(edgeId, weight, node1, node2)));
-    edges.insert(pair<string, Edge<T>>((node2.getId() + "-" + node1.getId()), Edge<T>(edgeId, weight, node2, node1)));
+        auto success = edges.insert(pair<string, Edge<K, T>>((node1Id + "-" + node2Id),
+                                                             Edge<K, T>((node1Id + "-" + node2Id), weight, node1, node2)));
+        success = edges.insert(pair<string, Edge<K, T>>((node2Id + "-" + node1Id),
+                                                        Edge<K, T>((node2Id + "-" + node1Id), weight, node2, node1)));
+
+        return success.second;
+    }
+    else if (is_arithmetic<K>::value)
+    {
+        auto success = edges.insert(pair<string, Edge<K, T>>(to_string(id1) + "-" + to_string(id2),
+                                                             Edge<K, T>((to_string(id1) + "-" + to_string(id2)), weight, node1, node2)));
+        success = edges.insert(pair<string, Edge<K, T>>(to_string(id2) + "-" + to_string(id1),
+                                                        Edge<K, T>((to_string(id2) + "-" + to_string(id1)), weight, node2, node1)));
+
+        return success.second;
+    }
+
+    auto success = edges.insert(pair<string, Edge<K, T>>(node1.getId() + "-" + node2.getId(), Edge<K, T>((node1.getId() + "-" + node2.getId()), weight, node1, node2)));
+    success = edges.insert(pair<string, Edge<K, T>>(node2.getId() + "-" + node1.getId(), Edge<K, T>((node2.getId() + "-" + node1.getId()), weight, node2, node1)));
+
+    return success.second;
 }
 
 /**
@@ -241,21 +280,74 @@ void Graph<K, T>::addEdge(K id1, K id2, double weight)
  * @param weight The weight of the edge.
  * @param directed If the relationship is directed or not. If it is false it
  * will only add the edge in one direction. Otherwise it will add the edge in both directions.
+ * @return true If the edge was added, false if wasn't.
+ *
+ * @throws bad_alloc If the node doesn't exist.
+ *
  */
 template <typename K, typename T>
-void Graph<K, T>::addEdge(K id1, K id2, double weight, bool directed)
+bool Graph<K, T>::addEdge(K id1, K id2, double weight, bool directed)
 {
+    Node<K, T> node1;
+    Node<K, T> node2;
+
+    try
+    {
+        node1 = nodes.find(id1)->second;
+        node2 = nodes.find(id2)->second;
+    }
+    catch (const bad_alloc &e)
+    {
+        std::cerr << "Error: " << e.what() << " Doesn't exist a node with the id1 or id2" << endl;
+
+        return false;
+    }
+
     if (!directed)
     {
-        Node<T> node1 = nodes.find(id1)->second;
-        Node<T> node2 = nodes.find(id2)->second;
 
-        string edgeId = node1.getId() + "-" + node2.getId();
+        if (is_same<K, char>::value)
+        {
+            string node1Id = "";
+            string node2Id = "";
+            node1Id += id1;
+            node2Id += id2;
 
-        edges.insert(pair<string, Edge<T>>(edgeId, Edge<T>(edgeId, weight, node1, node2)));
+            auto success = edges.insert(pair<string, Edge<K, T>>((node1Id + "-" + node2Id), Edge<K, T>((node1Id + "-" + node2Id), weight, node1, node2)));
+
+            return success.second;
+        }
+        else if (is_arithmetic<K>::value)
+        {
+            auto success = edges.insert(pair<string, Edge<K, T>>(to_string(id1 + "-" + id2), Edge<K, T>(to_string(id1 + "-" + id2), weight, node1, node2)));
+
+            return success.second;
+        }
     }
-    else
+
+    return addEdge(id1, id2, weight);
+}
+
+/**
+ * @brief This method adds an edge between two nodes, the edge is
+ *
+ * @tparam K            Key is the type of the key of the node.
+ * @tparam T            Data is the data of the node.
+ * @param edge          The edge to be added.
+ * @return true         If the edge was added.
+ * @return false        If the edge wasn't added.
+ */
+template <typename K, typename T>
+bool Graph<K, T>::addEdge(Edge<K, T> edge)
+{
+    regex pattern("[[:alnum:]]+-[[:alnum:]]+");
+
+    if (regex_match(edge.getId(), pattern))
     {
-        addEdge(id1, id2, weight);
+        auto success = edges.insert(pair<string, Edge<K, T>>(edge.getId(), edge));
+
+        return success.second;
     }
+
+    return false;
 }
