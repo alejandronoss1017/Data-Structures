@@ -19,10 +19,8 @@ using namespace std;
  * Nodes is a map of nodes, where the key is the id of the node and the
  * value is the node.
  *
- * Edges is a matrix of edges, where the first index is the id
- * of the node and the second index is the id of the node that
- * is connected to the first node. The value of the matrix is
- * the weight of the edge.
+ * Edges is a map of edges, where the first index is the id of the relationship,
+ * and the second is the edge.
  *
  * @tparam K Key is the type of the key of the node.
  * @tparam T Data is the type of the data of the node.

@@ -12,12 +12,12 @@ Graph<K, T>::Graph()
 }
 
 /**
- * @brief  Constructs a new object of the Graph class, it receives the nodes, edges and if the graph is directed.
+ * @brief  Constructs a new object of the Graph class, it receives the nodes and edges.
  *
  * @tparam K Key is the type of the key of the node.
  * @tparam T Data is the data of the node.
  * @param nodes Map of nodes, where the key is the id of the node and the value is the node.
- * @param edges Matrix of edges, where the first index is the id of the node and the second index is the id of the node that is connected to the first node. The value of the matrix is the weight of the edge.
+ * @param edges Map of edges, where the key is the relationship between nodes.
  * @param directed Boolean that indicates if the graph is directed.
  */
 template <typename K, typename T>
@@ -67,7 +67,8 @@ void Graph<K, T>::setNodes(map<K, Node<T>> nodes)
  *
  * @tparam K Key is the type of the key of the node.
  * @tparam T Data is the data of the node.
- * @return map<K, Edge<T>> Matrix of edges, where the first index is the id of the node and the second index is the id of the node that is connected to the first node. The value of the matrix is the weight of the edge.
+ * @return map<K, Edge<T>> Map of edges, where the key is the relationship between nodes and
+ *  the value is the edge.
  */
 template <typename K, typename T>
 map<string, Edge<T>> Graph<K, T>::getEdges() const
@@ -80,7 +81,8 @@ map<string, Edge<T>> Graph<K, T>::getEdges() const
  *
  * @tparam K Key is the type of the key of the node.
  * @tparam T Data is the data of the node.
- * @param edges Matrix of edges, where the first index is the id of the node and the second index is the id of the node that is connected to the first node. The value of the matrix is the weight of the edge.
+ * @param edges where the key is the relationship between nodes and
+ *  the value is the edge.
  */
 template <typename K, typename T>
 void Graph<K, T>::setEdges(map<string, Edge<T>> edges)
@@ -88,6 +90,14 @@ void Graph<K, T>::setEdges(map<string, Edge<T>> edges)
     Graph::edges = edges;
 }
 
+/**
+ * @brief Equals operator overload, it copies the nodes and edges of a graph to another.
+ *
+ * @tparam K Key is the type of the key of the node.
+ * @tparam T Data is the data of the node.
+ * @param otherGraph Graph to copy.
+ * @return Graph<K, T>& Graph with the nodes and edges copied.
+ */
 template <typename K, typename T>
 Graph<K, T> &Graph<K, T>::operator=(const Graph<K, T> &otherGraph)
 {
@@ -107,7 +117,7 @@ Graph<K, T> &Graph<K, T>::operator=(const Graph<K, T> &otherGraph)
  * @brief Equals operator overload, it compares if two graphs are equal.
  * @tparam K Key is the type of the key of the node.
  * @tparam T Data is the data of the node.
- * @param rhs Graph to compare.
+ * @param otherGraph Graph to compare.
  * @return true If the graphs are equal, false if aren't.
  */
 template <typename K, typename T>
@@ -117,12 +127,30 @@ bool Graph<K, T>::operator==(const Graph &otherGraph) const
            edges == otherGraph.edges;
 }
 
+/**
+ * @brief Not equals operator overload, it compares if two graphs are not equal.
+ *
+ * @tparam K  Key is the type of the key of the node.
+ * @tparam T  Data is the data of the node.
+ * @param otherGraph  Graph to compare.
+ * @return true If the graphs are not equal, false if are.
+ * @return false If the graphs are equal, true if aren't.
+ */
 template <typename K, typename T>
 bool Graph<K, T>::operator!=(const Graph &otherGraph) const
 {
     return !(otherGraph == *this);
 }
 
+/**
+ * @brief Output stream operator overload, it prints the nodes and edges of a graph.
+ *
+ * @tparam U  Key is the type of the key of the node.
+ * @tparam R  Data is the data of the node.
+ * @param os  Output stream.
+ * @param graph  Graph to print.
+ * @return ostream& Output stream.
+ */
 template <typename U, typename R>
 ostream &operator<<(ostream &os, const Graph<U, R> &graph)
 {
@@ -141,6 +169,16 @@ ostream &operator<<(ostream &os, const Graph<U, R> &graph)
     return os;
 }
 
+/**
+ * @brief Add a node to the graph, if the type of the key is not string, it converts it to string.
+ *  This will be used to add the node to the map of nodes. The id of the node is the key of the map.
+ * The node is added to the map of nodes.
+ *
+ * @tparam K Key is the type of the key of the node.
+ * @tparam T Data is the data of the node.
+ * @param id Id of the node.
+ * @param data Data of the node.
+ */
 template <typename K, typename T>
 void Graph<K, T>::addNode(K id, T data)
 {
@@ -166,12 +204,11 @@ void Graph<K, T>::addNode(K id, T data)
 }
 
 /**
- * @brief This method adds an edge between two nodes. If the graph is directed,
- * the edge is added in both directions. By default, the weight the edge is adding
- * in both directions as same as the relation, for example: id1 <-> id2 and id2 <-> id1,
- * the weight is the same for both edges.
+ * @brief This method adds an edge between two nodes.
+ * The weight the edge is adding in both directions as same as the relation,
+ * for example: id1 <-> id2 and id2 <-> id1,
  *
- *
+ * @tparam K Key is the type of the key of the node.
  * @tparam T Data is the data of the node.
  * @param id1 The id of the first node.
  * @param id2 The id of the second node.
@@ -191,21 +228,19 @@ void Graph<K, T>::addEdge(K id1, K id2, double weight)
 }
 
 /**
- * @brief This method adds an edge between two nodes. If the graph is directed, the edge is added in both directions.
- * The weight the edge is adding in both directions as same as the relation, for example: id1 <-> id2 and id2 <-> id1,
- * the weight is the same for both edges.
+ * @brief This method adds an edge between two nodes, the edge is
+ * added only in one direction as same as the weight.
  *
- * If directed is set to false, the edge is added only in one direction as same as the weight.
- *
- * for example: id1 -> id2, the weight is only for this edge.
- *
+ * The weight the edge is adding in from id1 node to id2 node,
+ * for example: id1 -> id2.
  *
  * @tparam K Key is the type of the key of the node.
  * @tparam T Data is the data of the node.
  * @param id1 The id of the first node.
  * @param id2 The id of the second node.
  * @param weight The weight of the edge.
- * @param directed If the graph is directed or not.
+ * @param directed If the relationship is directed or not. If it is false it
+ * will only add the edge in one direction. Otherwise it will add the edge in both directions.
  */
 template <typename K, typename T>
 void Graph<K, T>::addEdge(K id1, K id2, double weight, bool directed)
