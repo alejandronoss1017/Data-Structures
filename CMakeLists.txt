@@ -5,13 +5,13 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+# Set up Catch2
+find_package(Catch2 REQUIRED)
+
 # Add CTest
 include(CTest)
+include(Catch)
 enable_testing()
-
-
-# After downloanding it (apt install catch2)
-include_directories(/usr/local/include/catch2)
 
 # Set up global variables for build paths
 set(INCLUDE_DIR ${PROJECT_SOURCE_DIR}/include)
