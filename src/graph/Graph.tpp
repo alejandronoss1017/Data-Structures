@@ -426,3 +426,181 @@ bool Graph<K, T>::removeNode(Node<K, T> id)
 {
     return removeNode(id.getId());
 }
+
+/**
+ * @brief This method removes an edge from the graph, in both directions.
+ *
+ * @tparam K                Key is the type of the key of the node.
+ * @tparam T                Data is the data of the node.
+ * @param id1               The id of the first node.
+ * @param id2               The id of the second node.
+ * @return true             If the edge was removed.
+ * @return false            If the edge wasn't removed.
+ * @throws runtime_error    If the edge doesn't exist.
+ */
+template <typename K, typename T>
+bool Graph<K, T>::removeEdge(string id1, string id2)
+{
+    try
+    {
+        auto success1 = edges.erase(id1 + "-" + id2);
+        auto success2 = edges.erase(id2 + "-" + id1);
+
+        if (!success1)
+        {
+            throw runtime_error("Error: Edge " + id1 + "-" + id2 + " not exist");
+        }
+        if (!success2)
+        {
+            cout << "Warning: Edge " + id2 + "-" + id1 + " not exist" << endl;
+        }
+    }
+    catch (const runtime_error &e)
+    {
+        std::cerr << e.what() << endl;
+
+        return false;
+    }
+    return true;
+}
+
+/**
+ * @brief This method removes an edge from the graph, in one or both directions.
+ *        If the edge is directed, it will be removed just in one direction,
+ *        otherwise it will be removed in both directions.
+ *
+ * @tparam K                    Key is the type of the key of the node.
+ * @tparam T                    Data is the data of the node.
+ * @param id1                   The id of the first node.
+ * @param id2                   The id of the second node.
+ * @param directed              If the edge is directed or not.
+ * @return true                 If the edge was removed.
+ * @return false                If the edge wasn't removed.
+ * @throws runtime_error        If the edge doesn't exist.
+ */
+template <typename K, typename T>
+bool Graph<K, T>::removeEdge(string id1, string id2, bool directed)
+{
+    if (directed)
+    {
+        try
+        {
+            auto success = edges.erase(id1 + "-" + id2);
+
+            if (!success)
+            {
+                throw runtime_error("Error: Edge " + id1 + "-" + id2 + " not exist");
+            }
+        }
+        catch (const runtime_error &e)
+        {
+            std::cerr << e.what() << endl;
+
+            return false;
+        }
+        return true;
+    }
+
+    return removeEdge(id1, id2);
+}
+
+/**
+ * @brief This method removes an edge from the graph, the edge is removed in both directions.
+ *
+ * @tparam K                Key is the type of the key of the node.
+ * @tparam T                Data is the data of the node.
+ * @param edge              The edge to be removed.
+ * @return true             If the edge was removed.
+ * @return false            If the edge wasn't removed.
+ * @throws runtime_error    If the edge doesn't exist.
+ */
+template <typename K, typename T>
+bool Graph<K, T>::removeEdge(Edge<K, T> edge)
+{
+    try
+    {
+        string idToRemove1 = edge.getId();
+
+        string idToRemove2 = "";
+
+        if (is_same<K, char>::value)
+        {
+            char id1 = edge.getSource().getId();
+            char id2 = edge.getDestination().getId();
+
+            idToRemove2 += id2;
+            idToRemove2 += "-";
+            idToRemove2 += id1;
+        }
+        else if (is_arithmetic<K>::value)
+        {
+            idToRemove2 = to_string(edge.getDestination().getId()) + "-" + to_string(edge.getSource().getId());
+        }
+        else if (is_same<K, string>::value)
+        {
+            idToRemove2 = edge.getDestination().getId() + "-" + edge.getSource().getId();
+        }
+
+        auto success1 = edges.erase(idToRemove1);
+        auto success2 = edges.erase(idToRemove2);
+
+        if (!success1)
+        {
+            throw runtime_error("Error: Edge " + edge.getId() + " not exist");
+        }
+
+        if (!success2)
+        {
+            cout << "Warning: Edge " + idToRemove2 + " not exist" << endl;
+        }
+    }
+    catch (const runtime_error &e)
+    {
+        std::cerr << e.what() << endl;
+
+        return false;
+    }
+    return true;
+}
+
+/**
+ * @brief This method removes an edge from the graph, in one or both directions.
+ *        If the edge is directed, it will be removed just in one direction,
+ *        otherwise it will be removed in both directions.
+ *
+ * @tparam K                Key is the type of the key of the node.
+ * @tparam T                Data is the data of the node.
+ * @param edge              The edge to be removed.
+ * @param directed          If the edge is directed or not.
+ * @return true             If the edge was removed.
+ * @return false            If the edge wasn't removed.
+ * @throws runtime_error    If the edge doesn't exist.
+ */
+template <typename K, typename T>
+bool Graph<K, T>::removeEdge(Edge<K, T> edge, bool directed)
+{
+
+    if (directed)
+    {
+        try
+        {
+            string idToRemove1 = edge.getId();
+
+            auto success = edges.erase(idToRemove1);
+
+            if (!success)
+            {
+                throw runtime_error("Error: Edge " + edge.getId() + " not exist");
+            }
+        }
+        catch (const runtime_error &e)
+        {
+            std::cerr << e.what() << endl;
+
+            return false;
+        }
+        return true;
+    }
+
+    return removeEdge(edge);
+}
