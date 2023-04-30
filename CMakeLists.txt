@@ -27,7 +27,7 @@ add_library(QUAD_NODE SHARED ${SRC_DIR}/tree/quadTree/QuadNode.cpp)
 add_library(QUAD_TREE SHARED ${SRC_DIR}/tree/quadTree/QuadTree.cpp)
 add_library(GRAPH_NODE SHARED ${INCLUDE_DIR}/graph/Node.hpp ${SRC_DIR}/graph/Node.tpp)
 add_library(GRAPH_EGDE SHARED ${INCLUDE_DIR}/graph/Edge.hpp ${SRC_DIR}/graph/Edge.tpp)
-add_library(GRAPH SHARED ${INCLUDE_DIR}/graph/Graph.hpp ${SRC_DIR}/graph/graph.tpp)
+add_library(GRAPH SHARED ${INCLUDE_DIR}/graph/Graph.hpp ${SRC_DIR}/graph/Graph.tpp)
 
 # This property is used to specify the linker language to use for the target, becauese .tpp isn't by default 
 set_target_properties(BINARY_NODE PROPERTIES LINKER_LANGUAGE CXX)
@@ -43,6 +43,10 @@ set_target_properties(GRAPH PROPERTIES LINKER_LANGUAGE CXX)
 add_executable(avltest ${TEST_DIR}/treeTest/avlTreeTest/test.cpp)
 target_link_libraries(avltest PRIVATE stdc++ AVL_TREE)
 
+add_executable(graphAddingTest ${TEST_DIR}/graphTest/addNodeTest.cpp)
+target_link_libraries(graphAddingTest PRIVATE stdc++ GRAPH)
+
 
 # Add a executable file as a test
 add_test(NAME AVL_TREE_TEST COMMAND avltest Catch2)
+add_test(NAME GRAPH_TEST COMMAND graphAddingTest Catch2)
