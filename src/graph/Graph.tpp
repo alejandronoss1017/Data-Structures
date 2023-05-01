@@ -252,6 +252,8 @@ bool Graph<K, T>::addEdge(K id1, K id2, double weight)
             pair<string, Edge<K, T>>(
                 (node2Id + "-" + node1Id), Edge<K, T>((node2Id + "-" + node1Id), weight, node2, node1)));
 
+        nodes.at(id1).addEdgeId(node1Id + "-" + node2Id);
+        nodes.at(id2).addEdgeId(node2Id + "-" + node1Id);
         return (success1.second || success2.second);
     }
     else if (is_arithmetic<K>::value)
@@ -266,6 +268,8 @@ bool Graph<K, T>::addEdge(K id1, K id2, double weight)
                 to_string(id2) + "-" + to_string(id1),
                 Edge<K, T>(to_string(id2) + "-" + to_string(id1), weight, node2, node1)));
 
+        nodes.at(id1).addEdgeId(to_string(id1) + "-" + to_string(id2));
+        nodes.at(id2).addEdgeId(to_string(id2) + "-" + to_string(id1));
         return (success1.second || success2.second);
     }
 
@@ -275,6 +279,8 @@ bool Graph<K, T>::addEdge(K id1, K id2, double weight)
     auto success2 = edges.insert(
         pair<string, Edge<K, T>>(id2 + "-" + id1, Edge<K, T>(id2 + "-" + id1, weight, node2, node1)));
 
+    nodes.at(id1).addEdgeId(id1 + "-" + id2);
+    nodes.at(id2).addEdgeId(id2 + "-" + id1);
     return (success1.second || success2.second);
 }
 
@@ -329,6 +335,7 @@ bool Graph<K, T>::addEdge(K id1, K id2, double weight, bool directed)
             auto success = edges.insert(pair<string, Edge<K, T>>((node1Id + "-" + node2Id),
                                                                  Edge<K, T>((node1Id + "-" + node2Id), weight, node1, node2)));
 
+            nodes.at(id1).addEdgeId(node1Id + "-" + node2Id);
             return success.second;
         }
         else if (is_arithmetic<K>::value)
@@ -336,38 +343,16 @@ bool Graph<K, T>::addEdge(K id1, K id2, double weight, bool directed)
             auto success = edges.insert(pair<string, Edge<K, T>>(to_string(id1) + "-" + to_string(id2),
                                                                  Edge<K, T>((to_string(id1) + "-" + to_string(id2)), weight, node1, node2)));
 
+            nodes.at(id1).addEdgeId(to_string(id1) + "-" + to_string(id2));
             return success.second;
         }
 
         auto success = edges.insert(pair<string, Edge<K, T>>(node1.getId() + "-" + node2.getId(), Edge<K, T>((node1.getId() + "-" + node2.getId()), weight, node1, node2)));
 
+        nodes.at(id1).addEdgeId(node1.getId() + "-" + node2.getId());
         return success.second;
     }
     return addEdge(id1, id2, weight);
-}
-
-/**
- * @brief This method adds an edge between two nodes, the edge is
- *
- * @tparam K            Key is the type of the key of the node.
- * @tparam T            Data is the data of the node.
- * @param edge          The edge to be added.
- * @return true         If the edge was added.
- * @return false        If the edge wasn't added.
- */
-template <typename K, typename T>
-bool Graph<K, T>::addEdge(Edge<K, T> edge)
-{
-    regex pattern("[[:alnum:]]+-[[:alnum:]]+");
-
-    if (regex_match(edge.getId(), pattern))
-    {
-        auto success = edges.insert(pair<string, Edge<K, T>>(edge.getId(), edge));
-
-        return success.second;
-    }
-
-    return false;
 }
 
 /**

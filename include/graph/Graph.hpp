@@ -86,8 +86,6 @@ public:
 
     bool addEdge(K id1, K id2, double weight, bool directed);
 
-    bool addEdge(Edge<K, T> edge);
-
     bool removeNode(K id);
 
     bool removeNode(Node<K, T> node);
