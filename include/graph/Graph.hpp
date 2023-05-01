@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 #include <map>
+#include <queue>
 #include <ostream>
 #include <iostream>
 #include <regex>
@@ -44,6 +45,10 @@ protected:
     map<string, Edge<K, T>> edges;
 
     // vector<vector<int>> edges;
+private:
+    vector<Node<K, T>> depthFirstSearchHelper(K id, vector<Node<K, T>> &result);
+
+    vector<Node<K, T>> breadthFirstSearchHelper(K id, vector<Node<K, T>> &result);
 
 public:
     /* Constructors and Destructors */
@@ -94,6 +99,10 @@ public:
     bool removeEdge(Edge<K, T> edge);
 
     bool removeEdge(Edge<K, T> edge, bool directed);
+
+    vector<Node<K, T>> depthFirstSearch(K id);
+
+    vector<Node<K, T>> breadthFirstSearch(K id);
 };
 
 #include "../../src/graph/Graph.tpp"

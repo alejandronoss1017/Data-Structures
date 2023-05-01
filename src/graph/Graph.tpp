@@ -622,3 +622,125 @@ bool Graph<K, T>::removeEdge(Edge<K, T> edge, bool directed)
 
     return removeEdge(edge);
 }
+
+/**
+ * @brief This method is to make a depth first search in the graph.
+ *
+ * @tparam K                    Key is the type of the key of the node.
+ * @tparam T                    Data is the data of the node.
+ * @param id                    The id of the node to start the search.
+ * @return vector<Node<K, T>>   A vector with the nodes visited.
+ */
+template <typename K, typename T>
+vector<Node<K, T>> Graph<K, T>::depthFirstSearch(K id)
+{
+    vector<Node<K, T>> result;
+    return depthFirstSearchHelper(id, result);
+}
+
+/**
+ * @brief This method is to make a depth first search in the graph.
+ *
+ * @tparam K                    Key is the type of the key of the node.
+ * @tparam T                    Data is the data of the node.
+ * @param id                    The id of the current node.
+ * @param result                A vector to store the nodes visited.
+ * @return vector<Node<K, T>>   A vector with the nodes visited.
+ */
+template <typename K, typename T>
+vector<Node<K, T>> Graph<K, T>::depthFirstSearchHelper(K id, vector<Node<K, T>> &result)
+{
+    Node<K, T> node = nodes.find(id)->second;
+
+    result.push_back(node);
+
+    for (auto edge : edges)
+    {
+        /**
+         * The condition checks if the source (source) of the edge (edge) has the same id as
+         * the current node (id), that is, if the edge is connected to the current node. If
+         * the condition is met, it is checked if the destination node of the edge is already
+         * in the result vector using the std::find function.
+         *
+         * If the destination node is not in result, it is added to the vector and
+         * depthFirstSearchHelper is called recursively with the id of the destination
+         * node to continue the depth search. In this way, it is guaranteed that each node is
+         * visited only once during the in-depth traversal of the graph.
+         */
+
+        if (edge.second.getSource().getId() == id &&
+            find(result.begin(), result.end(), edge.second.getDestination()) == result.end())
+        {
+            depthFirstSearchHelper(edge.second.getDestination().getId(), result);
+        }
+    }
+    return result;
+}
+
+/**
+ * @brief This method is to make a breadth first search in the graph.
+ *
+ * @tparam K                    Key is the type of the key of the node.
+ * @tparam T                    Data is the data of the node.
+ * @param id                    The id of the node to start the search.
+ * @return vector<Node<K, T>>   A vector with the nodes visited.
+ */
+template <typename K, typename T>
+vector<Node<K, T>> Graph<K, T>::breadthFirstSearch(K id)
+{
+    vector<Node<K, T>> result;
+    return breadthFirstSearchHelper(id, result);
+}
+
+/**
+ * @brief This method is to make a breadth first search in the graph.
+ *
+ * @tparam K                    Key is the type of the key of the node.
+ * @tparam T                    Data is the data of the node.
+ * @param id                    The id of the node to start the search.
+ * @param result                A vector to store the nodes visited.
+ * @return vector<Node<K, T>>   A vector with the nodes visited.
+ */
+template <typename K, typename T>
+vector<Node<K, T>> Graph<K, T>::breadthFirstSearchHelper(K id, vector<Node<K, T>> &result)
+{
+    /**
+     * The function starts by finding the node with key "id" in the graph and inserts it into a queue.
+     * Then, as long as the queue is not empty, the function performs the following steps:
+     *
+     * 1.Takes the first element of the queue, which is the next node to visit in the width traversal.
+     *
+     * 2.Add this node to the "result" vector.
+     *
+     * 3.For each edge of the graph, it checks if the current node is the source node of the edge and if
+     * the destination node of the edge has not yet been visited (it is not in "result"). If this is true,
+     * it adds the destination node to the queue to visit later.
+     *
+     * 4.Repeat steps 1-3 for the next node in the queue.
+     *
+     */
+
+    Node<K, T> sourceNode = nodes.find(id)->second;
+    queue<Node<K, T>> queue;
+
+    queue.push(sourceNode);
+
+    while (!queue.empty())
+    {
+        Node<K, T> node = queue.front();
+        queue.pop();
+
+        result.push_back(node);
+
+        for (auto edge : edges)
+        {
+            if (edge.second.getSource().getId() == node.getId() &&
+                find(result.begin(), result.end(), edge.second.getDestination()) == result.end())
+            {
+                queue.push(edge.second.getDestination());
+            }
+        }
+    }
+
+    return result;
+}
