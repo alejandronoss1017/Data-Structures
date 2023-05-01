@@ -225,3 +225,16 @@ ostream &operator<<(ostream &os, const Node<U, L> &node)
        << "}";
     return os;
 }
+
+/**
+ * @brief Adds an edge Id to the list of edges Ids.
+ *
+ * @tparam K            is the type of the Id of the node.
+ * @tparam T            is the type of the data of the node.
+ * @param edgeId        is the edge Id to add.
+ */
+template <typename K, typename T>
+void Node<K, T>::addEdgeId(string edgeId)
+{
+    edgesIds.push_back(edgeId);
+}

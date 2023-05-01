@@ -64,6 +64,10 @@ public:
 
     template <typename U, typename L>
     friend ostream &operator<<(ostream &os, const Node<U, L> &node);
+
+    /* Methods */
+
+    void addEdgeId(string edgeId);
 };
 
 #include "../../src/graph/Node.tpp"
