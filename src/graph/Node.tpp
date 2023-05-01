@@ -38,6 +38,25 @@ Node<K, T>::Node(K id, int matrixId, T data)
 }
 
 /**
+ * @brief Construct a new Node object
+ *
+ * @tparam K            is the type of the Id of the node.
+ * @tparam T            is the type of the data of the node.
+ * @param id            is the id of the node.
+ * @param matrixId      is the id of the matrix where the node is.
+ * @param data          is the data of the node.
+ * @param edgesIds      is the list of edges Ids.
+ */
+template <typename K, typename T>
+Node<K, T>::Node(K id, int matrixId, T data, vector<string> edgesIds)
+{
+    Node::id = id;
+    Node::matrixId = matrixId;
+    Node::data = data;
+    Node::edgesIds = edgesIds;
+}
+
+/**
  * @brief Destroy the Node object
  *
  * @tparam K        is the type of the Id of the node.
@@ -125,6 +144,32 @@ void Node<K, T>::setData(T data)
 }
 
 /**
+ * @brief Gets the list of edges Ids.
+ *
+ * @tparam K                is the type of the Id of the node.
+ * @tparam T                is the type of the data of the node.
+ * @return vector<string>   is the list of edges Ids.
+ */
+template <typename K, typename T>
+vector<string> Node<K, T>::getEdgesIds() const
+{
+    return edgesIds;
+}
+
+/**
+ * @brief Sets the list of edges Ids.
+ *
+ * @tparam K                is the type of the Id of the node.
+ * @tparam T                is the type of the data of the node.
+ * @param edgesIds          is the list of edges Ids.
+ */
+template <typename K, typename T>
+void Node<K, T>::setEdgesIds(vector<string> edgesIds)
+{
+    Node::edgesIds = edgesIds;
+}
+
+/**
  * @brief Overloads the operator == to compare two nodes.
  *
  * @tparam K            is the type of the Id of the node.
@@ -168,8 +213,15 @@ bool Node<K, T>::operator!=(const Node<K, T> &otherNode) const
 template <typename U, typename L>
 ostream &operator<<(ostream &os, const Node<U, L> &node)
 {
-    os << "["
+    os << "{"
        << "id: " << node.id << " matrixId: " << node.matrixId << " data: " << node.data
-       << "]";
+       << " edgesIds: "
+       << "[";
+    for (auto edgeId : node.edgesIds)
+    {
+        os << edgeId << " ";
+    }
+    os << "]"
+       << "}";
     return os;
 }

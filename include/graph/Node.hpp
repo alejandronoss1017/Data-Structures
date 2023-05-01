@@ -1,8 +1,7 @@
 #if !defined(DATA_STRUCTURES_GRAPH_NODE_HPP)
 #define DATA_STRUCTURES_GRAPH_NODE_HPP
 
-#include <string>
-#include <ostream>
+#include <vector>
 
 using namespace std;
 
@@ -30,6 +29,8 @@ private:
     int matrixId;
     // Data of the node.
     T data;
+    // List of edges Ids.
+    vector<string> edgesIds;
 
 public:
     /* Constructors and Destructors */
@@ -37,6 +38,7 @@ public:
     Node();
     Node(T data);
     Node(K id, int matrixId, T data);
+    Node(K id, int matrixId, T data, vector<string> edgesIds);
 
     ~Node();
 
@@ -51,8 +53,11 @@ public:
     T getData() const;
     void setData(T data);
 
+    vector<string> getEdgesIds() const;
+    void setEdgesIds(vector<string> edgesIds);
+
     /* Operators */
-    
+
     bool operator==(const Node<K, T> &otherNode) const;
 
     bool operator!=(const Node<K, T> &otherNode) const;
