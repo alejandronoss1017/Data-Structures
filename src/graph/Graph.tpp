@@ -644,55 +644,46 @@ template <typename K, typename T>
 vector<Node<K, T>> Graph<K, T>::breadthFirstSearch(K id)
 {
     vector<Node<K, T>> result;
-    return breadthFirstSearchHelper(id, result);
+    set<K> visited;
+    return breadthFirstSearchHelper(id, result, visited);
 }
 
 /**
  * @brief This method is to make a breadth first search in the graph.
  *
- * @tparam K                    Key is the type of the key of the node.
- * @tparam T                    Data is the data of the node.
- * @param id                    The id of the node to start the search.
- * @param result                A vector to store the nodes visited.
- * @return vector<Node<K, T>>   A vector with the nodes visited.
+ *
+ * @tparam K                Key is the type of the key of the node.
+ * @tparam T                Data is the data of the node.
+ * @param id                The id of the current node.
+ * @param result            A vector to store the nodes.
+ * @param visited           A set to store the nodes visited.
+ * @return                  A vector with the nodes in the BFS.
  */
 template <typename K, typename T>
-vector<Node<K, T>> Graph<K, T>::breadthFirstSearchHelper(K id, vector<Node<K, T>> &result)
+vector<Node<K, T>> Graph<K, T>::breadthFirstSearchHelper(K id, vector<Node<K, T>> &result, set<K> &visited)
 {
-    /**
-     * The function starts by finding the node with key "id" in the graph and inserts it into a queue.
-     * Then, as long as the queue is not empty, the function performs the following steps:
-     *
-     * 1.Takes the first element of the queue, which is the next node to visit in the width traversal.
-     *
-     * 2.Add this node to the "result" vector.
-     *
-     * 3.For each edge of the graph, it checks if the current node is the source node of the edge and if
-     * the destination node of the edge has not yet been visited (it is not in "result"). If this is true,
-     * it adds the destination node to the queue to visit later.
-     *
-     * 4.Repeat steps 1-3 for the next node in the queue.
-     *
-     */
 
-    Node<K, T> sourceNode = nodes.find(id)->second;
+    // Create a queue for BFS
     queue<Node<K, T>> queue;
 
-    queue.push(sourceNode);
+    // Mark the current node as visited and enqueue it
+    visited.insert(id);
+    queue.push(nodes.find(id)->second);
 
     while (!queue.empty())
     {
-        Node<K, T> node = queue.front();
+        vector<Node<K, T>> neighbors = getNeighbors(queue.front().getId());
+
+        // Dequeue a vertex from queue and print it
+        result.push_back(queue.front());
         queue.pop();
 
-        result.push_back(node);
-
-        for (auto edge : edges)
+        for (auto neighbor : neighbors)
         {
-            if (edge.second.getSource().getId() == node.getId() &&
-                find(result.begin(), result.end(), edge.second.getDestination()) == result.end())
+            if (visited.find(neighbor.getId()) == visited.end())
             {
-                queue.push(edge.second.getDestination());
+                visited.insert(neighbor.getId());
+                queue.push(neighbor);
             }
         }
     }
