@@ -545,6 +545,40 @@ bool Graph<K, T>::removeEdge(Edge<K, T> edge, bool directed)
 }
 
 /**
+ * @brief Finds all the neighbors of a node.
+ *
+ *
+ * @tparam K                Key is the type of the key of the node.
+ * @tparam T                Data is the data of the node.
+ * @param id                The id of the node.
+ * @return                  A vector with all the neighbors of the node.
+ */
+template <typename K, typename T>
+vector<Node<K, T>> Graph<K, T>::getNeighbors(K id)
+{
+    vector<Node<K, T>> neighbors;
+
+    ostringstream oss;
+
+    oss << id;
+
+    string idString = oss.str();
+
+    regex patternSource(idString + "-[[:alnum:]]+");
+
+    for (auto it = edges.begin(); it != edges.end();)
+    {
+        if (regex_match(it->first, patternSource))
+        {
+            neighbors.push_back(it->second.getDestination());
+        }
+        it++;
+    }
+
+    return neighbors;
+}
+
+/**
  * @brief This method is to make a depth first search in the graph.
  *
  * @tparam K                    Key is the type of the key of the node.

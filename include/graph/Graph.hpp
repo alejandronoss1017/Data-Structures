@@ -99,6 +99,8 @@ public:
 
     bool removeEdge(Edge<K, T> edge, bool directed);
 
+    vector<Node<K, T>> getNeighbors(K id);
+
     vector<Node<K, T>> depthFirstSearch(K id);
 
     vector<Node<K, T>> breadthFirstSearch(K id);
