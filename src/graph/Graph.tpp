@@ -241,24 +241,17 @@ bool Graph<K, T>::addEdge(K id1, K id2, double weight)
 
     oss << id1 << "-" << id2;
 
-    string edgeId1 = oss.str();
+    string edgeId = oss.str();
 
-    node1.addEdgeId(edgeId1);
-
-    nodes.at(id1) = node1;
+    auto success1 = edges.insert(pair<string, Edge<K, T>>(edgeId, Edge<K, T>(edgeId, weight, node1, node2)));
 
     oss.str("");
 
     oss << id2 << "-" << id1;
 
-    string edgeId2 = oss.str();
+    edgeId = oss.str();
 
-    node2.addEdgeId(edgeId2);
-
-    nodes.at(id2) = node2;
-
-    auto success1 = edges.insert(pair<string, Edge<K, T>>(edgeId1, Edge<K, T>(edgeId1, weight, node1, node2)));
-    auto success2 = edges.insert(pair<string, Edge<K, T>>(edgeId2, Edge<K, T>(edgeId2, weight, node2, node1)));
+    auto success2 = edges.insert(pair<string, Edge<K, T>>(edgeId, Edge<K, T>(edgeId, weight, node2, node1)));
 
     return (success1.second || success2.second);
 }
@@ -309,10 +302,6 @@ bool Graph<K, T>::addEdge(K id1, K id2, double weight, bool directed)
         oss << id1 << "-" << id2;
 
         string edgeId = oss.str();
-
-        node1.addEdgeId(edgeId);
-
-        nodes.at(id1) = node1;
 
         auto success1 = edges.insert(pair<string, Edge<K, T>>(edgeId, Edge<K, T>(edgeId, weight, node1, node2)));
 
