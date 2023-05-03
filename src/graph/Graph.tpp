@@ -253,7 +253,7 @@ bool Graph<K, T>::addEdge(K id1, K id2, double weight)
 
     string edgeId2 = oss.str();
 
-    node2.addEdgeId(edgeId);
+    node2.addEdgeId(edgeId2);
 
     nodes.at(id2) = node2;
 
