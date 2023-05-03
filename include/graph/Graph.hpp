@@ -8,6 +8,7 @@
 #include <ostream>
 #include <iostream>
 #include <regex>
+#include <sstream>
 
 #include "Node.hpp"
 #include "Edge.hpp"
