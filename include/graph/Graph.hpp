@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 #include <map>
+#include <set>
 #include <queue>
 #include <ostream>
 #include <iostream>
@@ -49,7 +50,7 @@ protected:
 private:
     vector<Node<K, T>> depthFirstSearchHelper(K id, vector<Node<K, T>> &result);
 
-    vector<Node<K, T>> breadthFirstSearchHelper(K id, vector<Node<K, T>> &result);
+    vector<Node<K, T>> breadthFirstSearchHelper(K id, vector<Node<K, T>> &result, set<K> &visited);
 
 public:
     /* Constructors and Destructors */
