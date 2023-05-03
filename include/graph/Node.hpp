@@ -29,8 +29,6 @@ private:
     int matrixId;
     // Data of the node.
     T data;
-    // List of edges Ids.
-    vector<string> edgesIds;
 
 public:
     /* Constructors and Destructors */
@@ -38,7 +36,6 @@ public:
     Node();
     Node(T data);
     Node(K id, int matrixId, T data);
-    Node(K id, int matrixId, T data, vector<string> edgesIds);
 
     ~Node();
 
@@ -53,9 +50,6 @@ public:
     T getData() const;
     void setData(T data);
 
-    vector<string> getEdgesIds() const;
-    void setEdgesIds(vector<string> edgesIds);
-
     /* Operators */
 
     bool operator==(const Node<K, T> &otherNode) const;
@@ -66,8 +60,6 @@ public:
     friend ostream &operator<<(ostream &os, const Node<U, L> &node);
 
     /* Methods */
-
-    void addEdgeId(string edgeId);
 };
 
 #include "../../src/graph/Node.tpp"
