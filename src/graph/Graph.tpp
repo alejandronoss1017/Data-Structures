@@ -237,50 +237,25 @@ bool Graph<K, T>::addEdge(K id1, K id2, double weight)
         return false;
     }
 
-    if (is_same<K, char>::value)
-    {
-        string node1Id = "";
-        string node2Id = "";
-        node1Id += id1;
-        node2Id += id2;
+    ostringstream oss;
 
-        auto success1 = edges.insert(
-            pair<string, Edge<K, T>>(
-                (node1Id + "-" + node2Id), Edge<K, T>((node1Id + "-" + node2Id), weight, node1, node2)));
+    oss << id1 << "-" << id2;
 
-        auto success2 = edges.insert(
-            pair<string, Edge<K, T>>(
-                (node2Id + "-" + node1Id), Edge<K, T>((node2Id + "-" + node1Id), weight, node2, node1)));
+    string edgeId = oss.str();
 
-        nodes.at(id1).addEdgeId(node1Id + "-" + node2Id);
-        nodes.at(id2).addEdgeId(node2Id + "-" + node1Id);
-        return (success1.second || success2.second);
-    }
-    else if (is_arithmetic<K>::value)
-    {
-        auto success1 = edges.insert(
-            pair<string, Edge<K, T>>(
-                to_string(id1) + "-" + to_string(id2),
-                Edge<K, T>(to_string(id1) + "-" + to_string(id2), weight, node1, node2)));
+    auto success1 = edges.insert(pair<string, Edge<K, T>>(edgeId, Edge<K, T>(edgeId, weight, node1, node2)));
 
-        auto success2 = edges.insert(
-            pair<string, Edge<K, T>>(
-                to_string(id2) + "-" + to_string(id1),
-                Edge<K, T>(to_string(id2) + "-" + to_string(id1), weight, node2, node1)));
+    oss.str("");
 
-        nodes.at(id1).addEdgeId(to_string(id1) + "-" + to_string(id2));
-        nodes.at(id2).addEdgeId(to_string(id2) + "-" + to_string(id1));
-        return (success1.second || success2.second);
-    }
+    oss << id2 << "-" << id1;
 
-    auto success1 = edges.insert(
-        pair<string, Edge<K, T>>(id1 + "-" + id2, Edge<K, T>(id1 + "-" + id2, weight, node1, node2)));
+    edgeId = oss.str();
 
-    auto success2 = edges.insert(
-        pair<string, Edge<K, T>>(id2 + "-" + id1, Edge<K, T>(id2 + "-" + id1, weight, node2, node1)));
+    auto success2 = edges.insert(pair<string, Edge<K, T>>(edgeId, Edge<K, T>(edgeId, weight, node2, node1)));
 
-    nodes.at(id1).addEdgeId(id1 + "-" + id2);
-    nodes.at(id2).addEdgeId(id2 + "-" + id1);
+    node1.addEdgeId(edgeId);
+    node2.addEdgeId(edgeId);
+
     return (success1.second || success2.second);
 }
 
@@ -325,32 +300,17 @@ bool Graph<K, T>::addEdge(K id1, K id2, double weight, bool directed)
             return false;
         }
 
-        if (is_same<K, char>::value)
-        {
-            string node1Id = "";
-            string node2Id = "";
-            node1Id += node1.getId();
-            node2Id += node2.getId();
+        ostringstream oss;
 
-            auto success = edges.insert(pair<string, Edge<K, T>>((node1Id + "-" + node2Id),
-                                                                 Edge<K, T>((node1Id + "-" + node2Id), weight, node1, node2)));
+        oss << id1 << "-" << id2;
 
-            nodes.at(id1).addEdgeId(node1Id + "-" + node2Id);
-            return success.second;
-        }
-        else if (is_arithmetic<K>::value)
-        {
-            auto success = edges.insert(pair<string, Edge<K, T>>(to_string(id1) + "-" + to_string(id2),
-                                                                 Edge<K, T>((to_string(id1) + "-" + to_string(id2)), weight, node1, node2)));
+        string edgeId = oss.str();
 
-            nodes.at(id1).addEdgeId(to_string(id1) + "-" + to_string(id2));
-            return success.second;
-        }
+        auto success1 = edges.insert(pair<string, Edge<K, T>>(edgeId, Edge<K, T>(edgeId, weight, node1, node2)));
 
-        auto success = edges.insert(pair<string, Edge<K, T>>(node1.getId() + "-" + node2.getId(), Edge<K, T>((node1.getId() + "-" + node2.getId()), weight, node1, node2)));
+        node1.addEdgeId(edgeId);
 
-        nodes.at(id1).addEdgeId(node1.getId() + "-" + node2.getId());
-        return success.second;
+        return success1.second;
     }
     return addEdge(id1, id2, weight);
 }
@@ -368,20 +328,12 @@ template <typename K, typename T>
 bool Graph<K, T>::removeNode(K id)
 {
     Node<K, T> node;
-    string idString = "";
 
-    if (is_same<K, char>::value)
-    {
-        idString += id;
-    }
-    else if (is_arithmetic<K>::value)
-    {
-        idString = to_string(id);
-    }
-    else if (is_same<K, string>::value)
-    {
-        idString = id;
-    }
+    ostringstream oss;
+
+    oss << id;
+
+    string idString = oss.str();
 
     regex patternSource(idString + "-[[:alnum:]]+");
     regex patternDestination("[[:alnum:]]+-" + idString);
@@ -522,30 +474,19 @@ bool Graph<K, T>::removeEdge(Edge<K, T> edge)
 {
     try
     {
-        string idToRemove1 = edge.getId();
 
-        string idToRemove2 = "";
+        ostringstream oss1;
+        oss1 << edge.getSource().getId();
 
-        if (is_same<K, char>::value)
-        {
-            char id1 = edge.getSource().getId();
-            char id2 = edge.getDestination().getId();
+        ostringstream oss2;
+        oss2 << edge.getDestination().getId();
 
-            idToRemove2 += id2;
-            idToRemove2 += "-";
-            idToRemove2 += id1;
-        }
-        else if (is_arithmetic<K>::value)
-        {
-            idToRemove2 = to_string(edge.getDestination().getId()) + "-" + to_string(edge.getSource().getId());
-        }
-        else if (is_same<K, string>::value)
-        {
-            idToRemove2 = edge.getDestination().getId() + "-" + edge.getSource().getId();
-        }
+        string id1 = oss1.str();
 
-        auto success1 = edges.erase(idToRemove1);
-        auto success2 = edges.erase(idToRemove2);
+        string id2 = oss2.str();
+
+        auto success1 = edges.erase(id1 + "-" + id2);
+        auto success2 = edges.erase(id2 + "-" + id1);
 
         if (!success1)
         {
@@ -554,7 +495,7 @@ bool Graph<K, T>::removeEdge(Edge<K, T> edge)
 
         if (!success2)
         {
-            cout << "Warning: Edge " + idToRemove2 + " not exist" << endl;
+            cout << "Warning: Edge " + id2 + " not exist" << endl;
         }
     }
     catch (const runtime_error &e)
