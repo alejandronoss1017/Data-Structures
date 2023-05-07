@@ -157,6 +157,36 @@ bool Node<K, T>::operator!=(const Node<K, T> &otherNode) const
 }
 
 /**
+ * @brief  Overloads the operator < to compare two nodes.
+ *
+ *
+ * @tparam K            is the type of the Id of the node.
+ * @tparam T            is the type of the data of the node.
+ * @param otherNode     is the node to compare.
+ * @return              true if the node is less than the other node.
+ */
+template <typename K, typename T>
+bool Node<K, T>::operator<(const Node<K, T> &otherNode) const
+{
+    return id < otherNode.id;
+}
+
+/**
+ * @brief Overloads the operator > to compare two nodes.
+ *
+ *
+ * @tparam K            is the type of the Id of the node.
+ * @tparam T            is the type of the data of the node.
+ * @param otherNode     is the node to compare.
+ * @return              true if the node is greater than the other node.
+ */
+template <typename K, typename T>
+bool Node<K, T>::operator>(const Node<K, T> &otherNode) const
+{
+    return id > otherNode.id;
+}
+
+/**
  * @brief Overloads the operator << to print a node.
  *
  * @tparam U            is the type of the Id of the node.

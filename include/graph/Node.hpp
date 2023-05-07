@@ -56,6 +56,10 @@ public:
 
     bool operator!=(const Node<K, T> &otherNode) const;
 
+    bool operator<(const Node<K, T> &otherNode) const;
+
+    bool operator>(const Node<K, T> &otherNode) const;
+
     template <typename U, typename L>
     friend ostream &operator<<(ostream &os, const Node<U, L> &node);
 
