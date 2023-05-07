@@ -164,3 +164,36 @@ ostream &operator<<(ostream &os, const Edge<U, L> &edge)
     os << "Edge: {" << edge.id << " weight: " << edge.weight << " source: " << edge.source << " destination: " << edge.destination << "}";
     return os;
 }
+
+/**
+ * @brief   Overload of the operator == for the Edge class.
+ *
+ *
+ * @tparam K            Key is the type of the key of the nodes map, same type as node Id.
+ * @tparam T            Data is the type of the data of the node.
+ * @param edge          Edge object.
+ * @return              True if the edges are equal, false otherwise.
+ */
+template <typename K, typename T>
+bool Edge<K, T>::operator==(const Edge<K, T> &edge) const
+{
+    return id == edge.id &&
+           weight == edge.weight &&
+           source == edge.source &&
+           destination == edge.destination;
+}
+
+/**
+ * @brief   Overload of the operator != for the Edge class.
+ *
+ *
+ * @tparam K        Key is the type of the key of the nodes map, same type as node Id.
+ * @tparam T        Data is the type of the data of the node.
+ * @param edge      Edge object.
+ * @return          True if the edges are not equal, false otherwise.
+ */
+template <typename K, typename T>
+bool Edge<K, T>::operator!=(const Edge<K, T> &edge) const
+{
+    return !(edge == *this);
+}

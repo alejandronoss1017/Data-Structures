@@ -59,6 +59,10 @@ public:
     template <typename U, typename L>
     friend ostream &operator<<(ostream &os, const Edge<U, L> &edge);
 
+    bool operator==(const Edge<K, T> &edge) const;
+
+    bool operator!=(const Edge<K, T> &edge) const;
+
     /* Methods */
 };
 
