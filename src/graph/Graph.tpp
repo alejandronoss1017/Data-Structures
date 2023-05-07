@@ -723,3 +723,146 @@ vector<Node<K, T>> Graph<K, T>::breadthFirstSearchHelper(K id, vector<Node<K, T>
 
     return result;
 }
+
+/**
+ * @brief This method applies the Dijkstra algorithm to the graph, starting from the node with the id
+ *       passed as a parameter.
+ *
+ * @tparam K                    Key is the type of the key of the node.
+ * @tparam T                    Data is the data of the node.
+ * @param startNodeId           The id of the node to start the search.
+ * @return                      A map with the distances from the start node to each node in the graph.
+ */
+template <typename K, typename T>
+map<Node<K, T>, double> Graph<K, T>::dijkstra(K startNodeId)
+{
+    // Initialize the distance of all nodes to infinity, except the start node.
+    map<Node<K, T>, double> distances;
+    for (const auto &[id, node] : nodes)
+    {
+        if (id == startNodeId)
+        {
+            distances[node] = 0.0;
+        }
+        else
+        {
+            distances[node] = numeric_limits<double>::infinity();
+        }
+    }
+
+    // Intialize the set of visited nodes and the set of unvisited nodes.
+    set<Node<K, T>> visited;
+    set<Node<K, T>> unvisited;
+
+    for (const auto &[id, node] : nodes)
+    {
+        unvisited.insert(node);
+    }
+
+    // Iterate until all nodes have been visited.
+    while (!unvisited.empty())
+    {
+        // Find the unvisited node with the smallest distance.
+        Node<K, T> current;
+        double minDistance = numeric_limits<double>::infinity();
+        for (const auto &[node, distance] : distances)
+        {
+            if (unvisited.count(node) > 0 && distance < minDistance)
+            {
+                current = node;
+                minDistance = distance;
+            }
+        }
+
+        // Update the distances of the adjacent nodes.
+        for (const auto &neighbor : getNeighbors(current.getId()))
+        {
+            double altDistance = minDistance + getEdge(current.getId(), neighbor.getId()).getWeight();
+            if (altDistance < distances[neighbor])
+            {
+                distances[neighbor] = altDistance;
+            }
+        }
+
+        // Mark the current node as visited.
+        visited.insert(current);
+        unvisited.erase(current);
+    }
+
+    return distances;
+}
+
+/**
+ * @brief   This method applies will find the shortest path between two nodes in the graph. It uses
+ *         the Dijkstra algorithm to find the shortest path.
+ *
+ *
+ * @tparam K                    Key is the type of the key of the node.
+ * @tparam T                    Data is the data of the node.
+ * @param sourceId              The id of the source node.
+ * @param destinationId         The id of the destination node.
+ * @return                      A vector with the nodes in the shortest path.
+ */
+template <typename K, typename T>
+vector<Node<K, T>> Graph<K, T>::shortestPath(K sourceId, K destinationId)
+{
+    // Initialize distances and visited set
+    map<K, double> distances;
+    map<K, bool> visited;
+    for (auto node : nodes)
+    {
+        distances[node.first] = numeric_limits<double>::infinity();
+        visited[node.first] = false;
+    }
+    distances[sourceId] = 0;
+
+    // Create a priority queue to store the nodes to be visited
+    priority_queue<pair<double, K>, vector<pair<double, K>>, greater<pair<double, K>>> pq;
+    pq.push(make_pair(distances[sourceId], sourceId));
+
+    // Initialize the previous node map
+    map<K, K> previous;
+
+    while (!pq.empty())
+    {
+        // Get the node with the smallest distance
+        K current = pq.top().second;
+        pq.pop();
+
+        // If we have already visited this node, continue
+        if (visited[current])
+        {
+            continue;
+        }
+        visited[current] = true;
+
+        // Check all of the neighbors of the current node
+        for (Node<K, T> neighbor : getNeighbors(current))
+        {
+            // Calculate the distance to the neighbor
+            double distance = distances[current] + getEdge(current, neighbor.getId()).getWeight();
+
+            // Update the distance and previous node if we found a shorter path
+            if (distance < distances[neighbor.getId()])
+            {
+                distances[neighbor.getId()] = distance;
+                previous[neighbor.getId()] = current;
+
+                // Add the neighbor to the priority queue
+                pq.push(make_pair(distance, neighbor.getId()));
+            }
+        }
+    }
+
+    // Build the path from the previous node map
+    vector<Node<K, T>> path;
+    K current = destinationId;
+    while (previous.find(current) != previous.end())
+    {
+        path.insert(path.begin(), nodes[current]);
+        current = previous[current];
+    }
+    path.insert(path.begin(), nodes[sourceId]);
+
+    return path;
+}

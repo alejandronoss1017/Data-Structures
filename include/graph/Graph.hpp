@@ -10,6 +10,7 @@
 #include <iostream>
 #include <regex>
 #include <sstream>
+#include <limits>
 
 #include "Node.hpp"
 #include "Edge.hpp"
@@ -107,6 +108,10 @@ public:
     vector<Node<K, T>> depthFirstSearch(K id);
 
     vector<Node<K, T>> breadthFirstSearch(K id);
+
+    map<Node<K, T>, double> dijkstra(K startNodeId);
+
+    vector<Node<K, T>> shortestPath(K sourceId, K destinationId);
 };
 
 #include "../../src/graph/Graph.tpp"
