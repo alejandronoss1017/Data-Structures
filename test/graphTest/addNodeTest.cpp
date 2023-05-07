@@ -24,7 +24,7 @@ bool insert(vector<pair<K, T>> a)
     return true;
 }
 
-TEST_CASE("Insertion work correctly", "[insert]")
+TEST_CASE("Insertion test", "[insert]")
 {
     vector<pair<int, int>> numbers = {{1, 2}, {2, 3}, {3, 4}, {4, 5}};
     vector<pair<int, int>> numbersFail = {{1, 2}, {2, 3}, {3, 4}, {3, 5}};
@@ -65,4 +65,21 @@ TEST_CASE("Insertion work correctly", "[insert]")
 
     REQUIRE(insert(letters) == 1);
     REQUIRE(insert(lettersFail) == 0);
+}
+
+TEST_CASE("Insertion test2", "[addNode]")
+{
+    Graph<int, string> graph;
+
+    // Add a node with id 1 and data "Node 1"
+    REQUIRE(graph.addNode(1, "Node 1") == true);
+
+    // Check that the node was added correctly
+    map<int, Node<int, string>> nodes = graph.getNodes();
+    REQUIRE(nodes.size() == 1);
+    REQUIRE(nodes[1].getId() == 1);
+    REQUIRE(nodes[1].getData() == "Node 1");
+
+    // Try to add a node with the same id, which should fail
+    REQUIRE(graph.addNode(1, "Node 2") == false);
 }
