@@ -545,6 +545,39 @@ bool Graph<K, T>::removeEdge(Edge<K, T> edge, bool directed)
 }
 
 /**
+ * @brief This method will return the edge between two nodes.
+ *
+ *
+ * @tparam K                Key is the type of the key of the node.
+ * @tparam T                Data is the data of the node.
+ * @param source            The source idNode.
+ * @param destination       The destination idNode.
+ * @return                  The edge between the two nodes.
+ */
+template <typename K, typename T>
+Edge<K, T> Graph<K, T>::getEdge(K source, K destination)
+{
+    ostringstream oss;
+    Edge<K, T> edge;
+    oss << source << "-" << destination;
+
+    string idString = oss.str();
+
+    try
+    {
+        edge = edges.find(idString)->second;
+    }
+    catch (const bad_alloc &e)
+    {
+        std::cerr << e.what() << endl;
+
+        return Edge<K, T>();
+    }
+
+    return edge;
+}
+
+/**
  * @brief Finds all the neighbors of a node.
  *
  *
