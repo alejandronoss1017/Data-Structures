@@ -45,6 +45,6 @@ public:
 };
 
 // This must removed when compiling in CMake
-#include "../../../src/tree/quadTree/QuadTree.cpp"
+// #include "../../../src/tree/quadTree/QuadTree.cpp"
 
 #endif // DATA_STRUCTURES_QUAD_TREE_HPP
