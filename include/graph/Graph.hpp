@@ -89,6 +89,8 @@ public:
 
     bool addEdge(K id1, K id2, double weight, bool directed);
 
+    int getNodeIndex(K id) const;
+
     bool removeNode(K id);
 
     bool removeNode(Node<K, T> node);

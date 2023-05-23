@@ -257,6 +257,31 @@ bool Graph<K, T>::addEdge(K id1, K id2, double weight)
 }
 
 /**
+ * @brief               This method returns the index of a node in the nodes map.
+ *
+ *
+ * @tparam K            Key is the type of the key of the node.
+ * @tparam T            Data is the data of the node.
+ * @param id            Id of the node.
+ * @return              Index of the node.
+ */
+template <typename K, typename T>
+int Graph<K, T>::getNodeIndex(K id) const
+{
+    int index = 0;
+    for (const auto &nodePair : nodes)
+    {
+        if (nodePair.first == id)
+        {
+            return index;
+        }
+        index++;
+    }
+    // Return -1 or throw an exception if the node ID is not found
+    return -1;
+}
+
+/**
  * @brief This method adds an edge between two nodes, the edge is
  * added only in one direction as same as the weight.
  *
