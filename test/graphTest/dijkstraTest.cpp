@@ -34,16 +34,16 @@ TEST_CASE("Test dijkstra", "[dijkstra]")
 
     graph.addEdge("F", "G", 1);
 
-    auto result = graph.dijkstra("A");
+    map<Node<string, string>, double> result = graph.dijkstra("A");
 
     REQUIRE(result.size() == 7);
-    REQUIRE(result["A"].first == 0);
-    REQUIRE(result["B"].first == 5);
-    REQUIRE(result["C"].first == 2);
-    REQUIRE(result["D"].first == 7);
-    REQUIRE(result["E"].first == 1);
-    REQUIRE(result["F"].first == 11);
-    REQUIRE(result["G"].first == 3);
+    REQUIRE(result.at(Node<string, string>("A", 0,"C++")) == 0);
+    REQUIRE(result.at(Node<string, string>("B", 1,"Java")) == 5);
+    REQUIRE(result.at(Node<string, string>("C", 2,"Python")) == 2);
+    REQUIRE(result.at(Node<string, string>("D", 3,"JavaScript")) == 7);
+    REQUIRE(result.at(Node<string, string>("E", 4,"Go")) == 1);
+    REQUIRE(result.at(Node<string, string>("F", 5,"C#")) == 11);
+    REQUIRE(result.at(Node<string, string>("G", 6,"PHP")) == 3);
 }
 
 TEST_CASE("Test dijkstra2", "[dijkstra]")
@@ -64,8 +64,8 @@ TEST_CASE("Test dijkstra2", "[dijkstra]")
     map<Node<string, int>, double> distances = graph.dijkstra("A");
 
     REQUIRE(distances.size() == 4);
-    REQUIRE(distances[Node<string, int>("A", 0, 0)] == 0);
-    REQUIRE(distances[Node<string, int>("B", 1, 0)] == 7);
-    REQUIRE(distances[Node<string, int>("C", 2, 0)] == 3);
-    REQUIRE(distances[Node<string, int>("D", 3, 0)] == 9);
+    REQUIRE(distances[Node<string, int>("A", 0, 100)] == 0);
+    REQUIRE(distances[Node<string, int>("B", 1, 200)] == 7);
+    REQUIRE(distances[Node<string, int>("C", 2, 300)] == 3);
+    REQUIRE(distances[Node<string, int>("D", 3, 400)] == 9);
 }
