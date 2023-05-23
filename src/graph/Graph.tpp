@@ -414,7 +414,7 @@ bool Graph<K, T>::removeNode(Node<K, T> id)
  * @throws runtime_error    If the edge doesn't exist.
  */
 template <typename K, typename T>
-bool Graph<K, T>::removeEdge(string id1, string id2)
+bool Graph<K, T>::removeEdge(const string& id1, const string& id2)
 {
     try
     {

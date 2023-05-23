@@ -95,7 +95,7 @@ public:
 
     bool removeNode(Node<K, T> node);
 
-    bool removeEdge(string id1, string id2);
+    bool removeEdge(const string& id1, const string& id2);
 
     bool removeEdge(string id1, string id2, bool directed);
 
