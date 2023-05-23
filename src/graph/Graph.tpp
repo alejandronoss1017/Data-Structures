@@ -891,3 +891,55 @@ vector<Node<K, T>> Graph<K, T>::shortestPath(K sourceId, K destinationId)
 
     return path;
 }
+
+/**
+ * @brief       This method applies the Floyd-Warshall algorithm to the graph. It will find the
+ *              shortest path between all pairs of nodes in the graph.
+ *
+ *
+ * @tparam K            Key is the type of the key of the node.
+ * @tparam T            Data is the data of the node.
+ * @return              A matrix with the distances between all pairs of nodes in the graph.
+ */
+template <typename K, typename T>
+vector<vector<double>> Graph<K, T>::floydWarshall()
+{
+    // Initialize the distance matrix with infinite distances
+    vector<vector<double>> distances;
+    int n = nodes.size();
+    distances.resize(n, vector<double>(n, numeric_limits<double>::infinity()));
+
+    // Initialize the diagonal elements to 0
+    for (int i = 0; i < n; i++)
+    {
+        distances[i][i] = 0;
+    }
+
+    // Set the initial distances based on the existing edges
+    for (const auto &edgePair : edges)
+    {
+        const Edge<K, T> &edge = edgePair.second;
+        int sourceIndex = getNodeIndex(edge.getSource().getId());
+        int destinationIndex = getNodeIndex(edge.getDestination().getId());
+        distances[sourceIndex][destinationIndex] = edge.getWeight();
+    }
+
+    // Perform the Floyd-Warshall algorithm
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            for (int k = 0; k < n; k++)
+            {
+                if (distances[i][k] != numeric_limits<double>::infinity() &&
+                    distances[k][j] != numeric_limits<double>::infinity() &&
+                    distances[i][k] + distances[k][j] < distances[i][j])
+                {
+                    distances[i][j] = distances[i][k] + distances[k][j];
+                }
+            }
+        }
+    }
+
+    return distances;
+}

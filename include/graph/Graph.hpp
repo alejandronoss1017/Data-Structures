@@ -114,6 +114,8 @@ public:
     map<Node<K, T>, double> dijkstra(K startNodeId);
 
     vector<Node<K, T>> shortestPath(K sourceId, K destinationId);
+
+    vector<vector<double>> floydWarshall();
 };
 
 #include "../../src/graph/Graph.tpp"
