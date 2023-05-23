@@ -763,24 +763,30 @@ map<Node<K, T>, double> Graph<K, T>::dijkstra(K startNodeId)
 {
     // Initialize the distance of all nodes to infinity, except the start node.
     map<Node<K, T>, double> distances;
-    for (const auto &[id, node] : nodes)
+    for (auto it = nodes.begin(); it != nodes.end(); ++it)
     {
+        const auto& id = it->first;
+        const auto& node = it->second;
+
         if (id == startNodeId)
         {
             distances[node] = 0.0;
         }
         else
         {
-            distances[node] = numeric_limits<double>::infinity();
+            distances[node] = std::numeric_limits<double>::infinity();
         }
     }
+
 
     // Intialize the set of visited nodes and the set of unvisited nodes.
     set<Node<K, T>> visited;
     set<Node<K, T>> unvisited;
 
-    for (const auto &[id, node] : nodes)
+    for (typename std::map<K, Node<K, T>>::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
     {
+        const K& id = it->first;
+        const Node<K, T>& node = it->second;
         unvisited.insert(node);
     }
 
@@ -790,8 +796,12 @@ map<Node<K, T>, double> Graph<K, T>::dijkstra(K startNodeId)
         // Find the unvisited node with the smallest distance.
         Node<K, T> current;
         double minDistance = numeric_limits<double>::infinity();
-        for (const auto &[node, distance] : distances)
+
+        for (auto it = distances.begin(); it != distances.end(); ++it)
         {
+            const auto& node = it->first;
+            const auto& distance = it->second;
+
             if (unvisited.count(node) > 0 && distance < minDistance)
             {
                 current = node;
