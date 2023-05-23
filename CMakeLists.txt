@@ -46,6 +46,18 @@ target_link_libraries(avltest PRIVATE stdc++ AVL_TREE)
 add_executable(graphAddingTest ${TEST_DIR}/graphTest/addNodeTest.cpp)
 target_link_libraries(graphAddingTest PRIVATE stdc++ GRAPH)
 
+add_executable(graphBFSTest ${TEST_DIR}/graphTest/bfsTest.cpp)
+target_link_libraries(graphBFSTest PRIVATE stdc++ GRAPH)
+
+add_executable(graphDFSTest ${TEST_DIR}/graphTest/dfsTest.cpp)
+target_link_libraries(graphBFSTest PRIVATE stdc++ GRAPH)
+
+add_executable(graphDijkstraTest ${TEST_DIR}/graphTest/dijkstraTest.cpp)
+target_link_libraries(graphDijkstraTest PRIVATE stdc++ GRAPH)
+
+add_executable(graphFloydWarshallTest ${TEST_DIR}/graphTest/floydWarshallTest.cpp)
+target_link_libraries(graphFloydWarshallTest PRIVATE stdc++ GRAPH)
+
 
 # Add a executable file as a test
 add_test(NAME AVL_TREE_TEST COMMAND avltest Catch2)
