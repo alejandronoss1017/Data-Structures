@@ -62,3 +62,7 @@ target_link_libraries(graphFloydWarshallTest PRIVATE stdc++ GRAPH)
 # Add a executable file as a test
 add_test(NAME AVL_TREE_TEST COMMAND avltest Catch2)
 add_test(NAME GRAPH_TEST COMMAND graphAddingTest Catch2)
+add_test(NAME GRAPH_BFS_TEST COMMAND graphBFSTest Catch2)
+add_test(NAME GRAPH_DFS_TEST COMMAND graphDFSTest Catch2)
+add_test(NAME GRAPH_DIJKSTRA_TEST COMMAND graphDijkstraTest Catch2)
+add_test(NAME GRAPH_FLOYD_WARSHALL_TEST COMMAND graphFloydWarshallTest Catch2)
